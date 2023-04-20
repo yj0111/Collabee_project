@@ -1,0 +1,60 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!-- 리뷰 수정 모달 -->
+<!-- The Modal -->
+<div class="modal" id="myModal4">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h3 class="modal-title">리뷰 수정하기</h3>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+
+      <!-- Modal body -->
+      
+        <div style="padding: 16px 0px; border-bottom: 1px solid lightgray;">
+              <div style="margin-left: 20px; float: left; margin-right: 20px;">
+              <img src="../resources/imgs/goods/${goods.thumSysFilename }" alt="크림파스타" style="width: 72px; height: 72px; border-radius: 4px;">
+              </div>
+              <div style="float: left; margin-top: 25px;">
+                  <span>${goods.productName }</span>
+              </div>
+          </div>  
+        <form id="updateR" method="post" enctype="multipart/form-data">  
+      <div class="modal-body" style="margin-left: 10px;">     
+          <div style="float: left; margin-top: 10px; margin-right: 20px;">
+          <div style="float: left; margin-right: 20px;">
+              <span>내용</span>    
+          </div>
+          <div style="float: left; margin-bottom: 20px;">
+          <textarea class="form-control" rows="5" id="comment" name="rContent" inputmode="text" 
+          aria-label="textarea-message" class="textarea" 
+          style="border-radius: 0.2em; width: 670px; height: 250px;" >${review.rContent }</textarea>
+          </div>
+          </div>
+          <!-- 사진 첨부 -->
+          <div class="filebox" style="margin-left: 52px; width: 715px;">
+              <input class="upload-name" value="첨부파일" placeholder="첨부파일">
+              <label for="file" style="background-color: #692498;">파일찾기</label>
+              <input type="file" id="file" name="rOriFilename" class="upload-hidden" multifile>
+          </div>
+    
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" style="background-color: white; border: 1px solid lightgray;
+         color: black; text-align: center;" class="btn btn-danger" data-dismiss="modal">취소</button>
+          <input type="button" onclick="updateReivew()" value="수정" style="background-color: #692498; color: white; 
+          width: 60px; height: 37px; border-radius: 0.2em; text-align: center; border: none;">
+      </div>
+      
+      <input type="hidden" name="productNum" value="${goods.productNum }">
+      
+	</form>
+	
+    </div>
+  </div>
+</div>

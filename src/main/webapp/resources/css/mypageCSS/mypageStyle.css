@@ -1,0 +1,120 @@
+@font-face {
+    font-family: 'SUIT-Medium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Medium.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+{
+	font-family: 'SUIT-Medium';
+}
+
+ .btn:active, .btn:focus {
+      outline:none !important;
+      box-shadow:none !important;
+    }
+
+    #mypage-cover{
+      padding-bottom: 50px;
+    }
+    #mypage-top {
+      padding-top: 50px;
+      margin: auto;
+      text-align: center;
+    }
+    .blank{
+        height: 30px;
+    }
+    .mypage-top2 {
+      height: 212px;
+      display: inline-block;
+      background-color: white;
+      margin-right:5px; /*마이페이지 윗 부분 메뉴 나눔*/
+      margin-bottom: 20px;
+      padding: 30px;
+    }
+    .mypage-top2 div {
+        margin-bottom: 10px;
+    }
+    .align-left { /*적립금, 쿠폰 텍스트 정렬*/
+      text-align: left;
+    }
+    .btn {
+      padding: 0px;
+    }
+    #allgrade, #nextgrade { /*등급 버튼*/
+      font-size: small;
+      font-weight: bold;
+      background-color:#F7F7F7;
+      border-radius: 30px;
+    }
+
+    .purple-bold {
+       color: #B03FE3;
+       font-size: x-large;
+       font-weight: bold;
+    }
+    
+    #eventbn { 
+      background-color: darkolivegreen;
+      width: 100%;
+      height: 60px;
+    }
+
+
+    /* mypage-bottom 네비바*/
+    /* 네비바 제목 */
+    h3 {
+      margin: 0px 0px 15px 5px;
+    }
+
+  .list-group-item a{
+      text-decoration: none;
+      color:black;
+    }
+    .list-group-item:hover {
+      background-color: #FEF7FF;
+    }     
+    .list-group-item:hover > a {
+      font-weight: bold;
+      text-decoration: none;
+      color:#B03FE3;
+    }
+    .list-group-item:hover >span {
+      font-weight: bold;
+      text-decoration: none;
+      color:#B03FE3;
+    }
+    .list-group-item a {
+      width: 100%;
+      display: block;
+    }
+
+    li span{font-size: large;
+      font-weight: bold;
+      color: black;
+    }
+
+    h2{font-weight: bold;
+      }
+    
+    h4{font-weight: bolder;
+      }
+  
+    /* 마이페이지 컨텐츠영역 */
+    .col-sm-6 {
+      padding: 15px;
+      padding-right: 40px;
+    }
+    .mypage-top3{
+      border-bottom: 2px solid black;
+    }
+    .mypage-top4{
+      padding: 50px 15px 15px 15px;
+    }
+    
+    /* 적립금, 쿠폰 input태그  */
+    #totalEmoney, #couponCnt {
+    	width: 50px !important;
+    }
+    

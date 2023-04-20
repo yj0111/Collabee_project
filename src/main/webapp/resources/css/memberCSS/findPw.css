@@ -1,0 +1,68 @@
+ /* 부트스트랩 버튼 효과제거 */
+  .btn:active, .btn:focus {
+    outline:none !important;
+    box-shadow:none !important;
+  }
+  
+  /* 유효성검사 알림 */
+  .hide {
+    display: none;
+  }
+  /* 유효성검사 안내메시지 */
+	.red-message {
+        font-size: small;
+        font-weight: bold;
+        color: red;
+    }
+    
+    .purple-message {
+    	font-size: small;
+        font-weight: bold;
+        color: purple;
+    }
+
+  button{
+    width: 160px; 
+    height: 54px; 
+    padding: 0px; 
+    margin: auto;
+    border-bottom: 1px solid #692498;
+  }
+  #phoneAuthArea,
+  #emailAuthArea {
+    margin-top: 20px;
+  }
+  #authbtn, #authChkbtn {
+    background-color: #692498; 
+    color: white;
+    font-weight: bold; 
+    width: 340px; 
+    height: 56px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 5px;
+  }
+
+  form {
+    width: 380px;
+    margin:auto;
+  }
+  .form-control{
+    width: 340px;
+    margin: auto;
+    padding: 0px 11px 1px 15px;
+  }
+  label{
+    font-size: small;
+    font-weight: bold;
+    margin: 0px 0px 0px 15px;
+    padding: 5px;
+  }
+  .menuBox {
+    width: 340px;
+    border-bottom: 1px solid grey;
+  }
+  .menu {
+    display: inline;
+  }
+ 

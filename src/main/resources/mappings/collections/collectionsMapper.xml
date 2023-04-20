@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="collectionsDAO">
+
+<!-- 카테고리(대분류, 소분류) -->
+	<select id="getCategories" resultType="categories">
+		SELECT CATEGORY_NUM, CATEGORY FROM CATEGORY
+	</select>
+
+	<select id="getDivision" resultType="division">
+		SELECT D.DIVISION_NUM, D.DIVISION, D.CATEGORY_NUM, C.CATEGORY FROM DIVISION D, CATEGORY C
+      	WHERE D.CATEGORY_NUM = C.CATEGORY_NUM
+	</select>
+	
+	<select id="getDivisionByCategory" parameterType="division" resultType="division">
+		SELECT DIVISION_NUM, DIVISION, CATEGORY_NUM FROM DIVISION WHERE CATEGORY_NUM = #{categoryNum }
+	</select>
+	
+	<select id="getJsonGoodsListCount" resultType="int"  parameterType="Map">
+		SELECT COUNT(*)
+		FROM PRODUCT P, DIVISION DI, PACKAGE_CONDITION C, DELIVERY DE
+			WHERE P.DIVISION_NUM = DI.DIVISION_NUM
+			    AND P.STORAGE_NUM = C.STORAGE_NUM
+			    AND P.DELIVERY_CODE = DE.DELIVERY_CODE
+			    AND P.PRODUCT_DEL = 'N'
+			    <if test="goods.categoryType != null">
+			    	AND DI.CATEGORY_NUM IN 
+			    	<foreach collection="goods.typeList" item="type"  open="(" close=")" separator=",">
+						#{type}
+					</foreach>
+			    </if>
+			    <if test="sword != null">
+			    	AND PRODUCT_NAME LIKE '%' || #{sword } || '%'
+			    </if>
+			    <choose>
+				    <when test="goods.priceStart != null and goods.priceStart.equals('') and goods.priceEnd != null">
+				    	<![CDATA[AND P.SALEPRICE < #{goods.priceEnd }]]>
+				    </when>
+				    <when test="goods.priceEnd != null and goods.priceStart != null and goods.priceEnd.equals('')">
+				    	AND P.SALEPRICE > #{goods.priceStart }
+				    </when>
+				    <when test="goods.priceStart != null and goods.priceEnd != null">
+				    	AND P.SALEPRICE BETWEEN #{goods.priceStart } AND #{goods.priceEnd }
+				    </when>
+				    <otherwise>
+				    </otherwise>
+			    </choose>  
+			    <if test="goods.benefitType != null">
+			    	<if test="goods.benefitType.equals('discount')">
+			    		AND P.DIS_RATE != 0
+		    		</if>
+			    </if>
+			ORDER BY REGDATE DESC   
+	</select>
+	
+	
+	<select id="getJsonGoodsList" resultType="goods" parameterType="Map">
+		SELECT *FROM (
+		SELECT ROWNUM R_NUM2 , SET2.* FROM (
+		 <if test="searchType != null and searchType.equals('newItem')">
+		    SELECT SET1.* FROM (
+	    </if>
+			SELECT ROWNUM R_NUM1, P.PRODUCT_NUM, P.PRODUCT_NAME, P.DESCRIPTION AS P_DESCRIPTION, P.PRICE
+			, P.DIS_RATE, P.SALEPRICE, P.REGDATE, P.COUNT, P.STOCK
+			, P.THUM_ORI_FILENAME, P.THUM_SYS_FILENAME, P.DETAILE_ORI_FILENAME
+			, P.DETAILE_SYS_FILENAME, DE.DELIVERY_TYPE, DE.DESCRIPTION AS DE_DESCRIPTION
+			, P.SELLER, P.PRODUCT_DEL, P.DIS_DATE, DI.DIVISION, C.CONDITION, DI.CATEGORY_NUM, P.HIT  
+			FROM PRODUCT P, DIVISION DI, PACKAGE_CONDITION C, DELIVERY DE
+			WHERE P.DIVISION_NUM = DI.DIVISION_NUM
+			    AND P.STORAGE_NUM = C.STORAGE_NUM
+			    AND P.DELIVERY_CODE = DE.DELIVERY_CODE
+			    AND P.PRODUCT_DEL = 'N'
+			    <if test="searchType != null and searchType.equals('newItem')">
+				    ORDER BY REGDATE DESC ) SET1
+				    WHERE 1=1
+				    <![CDATA[AND ROWNUM <= 21]]>
+		    	</if>
+		    	
+			    <if test="goods.categoryType != null">
+			    	AND CATEGORY_NUM IN 
+			    	<foreach collection="goods.typeList" item="type"  open="(" close=")" separator=",">
+						#{type}
+					</foreach>
+			    </if>
+			    <if test="sword != null">
+			    	AND PRODUCT_NAME LIKE '%' || #{sword } || '%'
+			    </if>
+			    <choose>
+				    <when test="goods.priceStart != null and goods.priceStart.equals('') and goods.priceEnd != null">
+				    	<![CDATA[AND SALEPRICE < #{goods.priceEnd }]]>
+				    </when>
+				    <when test="goods.priceEnd != null and goods.priceStart != null and goods.priceEnd.equals('')">
+				    	AND SALEPRICE > #{goods.priceStart }
+				    </when>
+				    <when test="goods.priceStart != null and goods.priceEnd != null">
+				    	AND SALEPRICE BETWEEN #{goods.priceStart } AND #{goods.priceEnd }
+				    </when>
+				    <otherwise>
+				    </otherwise>
+			    </choose>  
+			    <if test="goods.benefitType != null">
+			    	<if test="goods.benefitType.equals('discount')">
+			    		AND DIS_RATE != 0
+		    		</if>
+			    </if>
+			    
+			    <if test="filterType != null">
+			    	<choose>
+			    		<when test="filterType.equals('sales')">
+			    			ORDER BY COUNT DESC
+			    		</when>
+			    		<when test="filterType.equals('lowPrice')">
+			    			ORDER BY SALEPRICE 
+			    		</when>
+			    		<when test="filterType.equals('highPrice')">
+			    			ORDER BY SALEPRICE DESC
+			    		</when>
+			    		<when test="filterType.equals('recommend')">
+			    			<choose>
+				    			<when test="searchType != null and searchType.equals('newItem')">
+				    				ORDER BY (SET1.HIT + SET1.COUNT + (SELECT COUNT(*) FROM PRO_REVIEW))
+				    			</when>
+				    			<otherwise>
+				    				ORDER BY (HIT + COUNT + (SELECT COUNT(*) FROM PRO_REVIEW))
+				    			</otherwise>
+			    			</choose>
+			    		</when>
+			    	</choose>
+			    </if>
+			)SET2 
+		)
+		WHERE R_NUM2 BETWEEN #{moreStartNum } AND #{moreEndNum } 
+		
+
+	</select>
+	
+	
+	
+	
+	<select id="getGoodsListByCategory" parameterType="Map" resultType="goods">
+	
+		SELECT *FROM (
+		SELECT ROWNUM R_NUM2 , SET2.* FROM (
+				SELECT SET1.* FROM (
+				SELECT P.PRODUCT_NUM, P.PRODUCT_NAME, P.DESCRIPTION AS P_DESCRIPTION, P.PRICE
+				, P.DIS_RATE, P.SALEPRICE, P.REGDATE, P.COUNT, P.STOCK
+				, P.THUM_ORI_FILENAME, P.THUM_SYS_FILENAME, P.DETAILE_ORI_FILENAME
+				, P.DETAILE_SYS_FILENAME, DE.DELIVERY_TYPE, DE.DESCRIPTION AS DE_DESCRIPTION
+				, P.SELLER, P.PRODUCT_DEL, P.DIS_DATE, DI.DIVISION, C.CONDITION, P.HIT 
+				FROM PRODUCT P, DIVISION DI, PACKAGE_CONDITION C, DELIVERY DE
+				WHERE P.DIVISION_NUM = DI.DIVISION_NUM
+				    AND P.STORAGE_NUM = C.STORAGE_NUM
+				    AND P.DELIVERY_CODE = DE.DELIVERY_CODE
+				    AND P.PRODUCT_DEL = 'N'
+				<choose>
+					<when test="goods.divisionNum != 0">
+						AND DI.DIVISION_NUM = #{goods.divisionNum }
+					</when>
+					<otherwise>
+						AND DI.DIVISION_NUM IN (
+						        SELECT D.DIVISION_NUM FROM CATEGORY C, DIVISION D
+						        WHERE C.CATEGORY_NUM = D.CATEGORY_NUM
+			            			  AND C.CATEGORY_NUM = #{categoryNum }
+								)  
+					</otherwise>
+				</choose>
+				
+				) SET1
+				    WHERE 1=1
+			    <choose>
+				    <when test="goods.priceStart != null and goods.priceStart.equals('') and goods.priceEnd != null">
+				    	<![CDATA[AND SALEPRICE < #{goods.priceEnd }]]>
+				    </when>
+				    <when test="goods.priceEnd != null and goods.priceStart != null and goods.priceEnd.equals('')">
+				    	AND SALEPRICE > #{goods.priceStart }
+				    </when>
+				    <when test="goods.priceStart != null and goods.priceEnd != null">
+				    	AND SALEPRICE BETWEEN #{goods.priceStart } AND #{goods.priceEnd }
+				    </when>
+				    <otherwise>
+				    </otherwise>
+			    </choose>  
+			    <if test="goods.benefitType != null">
+			    	<if test="goods.benefitType.equals('discount')">
+			    		AND DIS_RATE != 0
+		    		</if>
+			    </if>
+			    
+			    <if test="filterType != null">
+			    	<choose>
+			    		<when test="filterType.equals('sales')">
+			    			ORDER BY COUNT DESC
+			    		</when>
+			    		<when test="filterType.equals('lowPrice')">
+			    			ORDER BY SALEPRICE 
+			    		</when>
+			    		<when test="filterType.equals('highPrice')">
+			    			ORDER BY SALEPRICE DESC
+			    		</when>
+			    		<when test="filterType.equals('recommend')">
+					    			ORDER BY (SET1.HIT + SET1.COUNT + (SELECT COUNT(*) FROM PRO_REVIEW))
+			    		</when>
+			    	</choose>
+			    </if>
+			    )SET2 
+		)
+		WHERE R_NUM2 BETWEEN #{moreStartNum } AND #{moreEndNum } 
+		
+		
+	</select>
+	
+	<select id="getSpecial" parameterType="int" resultType="goods">
+		SELECT P.PRODUCT_NUM, P.PRODUCT_NAME, P.PRICE, P.DIS_RATE, P.SALEPRICE, P.DESCRIPTION AS P_DESCRIPTION
+				, P.THUM_ORI_FILENAME, P.DETAILE_ORI_FILENAME, P.THUM_SYS_FILENAME, P.DETAILE_SYS_FILENAME
+		FROM PRODUCT P, SPECIAL S
+		WHERE P.PRODUCT_NUM = S.PRODUCT_NUM
+		    AND S.SPECIAL_NUM = #{specialNum }
+		    AND P.PRODUCT_DEL = 'N'
+	</select>
+	
+	<select id="getSpecialCat" resultType="specialCat">
+		SELECT * FROM SPECIAL_CAT ORDER BY SPECIAL_NUM
+	</select>
+	
+	<select id="searchProduct" parameterType="String" resultType="goods">
+		SELECT * from product
+	</select>
+	
+	<select id="getCategoryName" parameterType="division" resultType="division">
+		SELECT CATEGORY FROM CATEGORY WHERE CATEGORY_NUM = #{categoryNum }
+	</select>	
+	
+	<select id="getOneGood" parameterType="goods" resultType="goods">
+		SELECT THUM_SYS_FILENAME, PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_NUM = #{productNum }
+	</select>
+</mapper>
+
+
+
+
+
+

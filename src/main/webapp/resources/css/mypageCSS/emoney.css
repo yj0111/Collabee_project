@@ -1,0 +1,88 @@
+ /* 현재적립금 */
+    dl {
+      width: 410px;
+      height: 100px;
+      padding: 34px 50px 36px;
+      border: 1px solid lightgrey;
+    }
+    dl:first-child {
+      margin-right: 10px;
+    }
+    dt {
+      text-align: left;
+      font-size: small;
+      font-weight: bold;
+      margin-top: 3px;
+    }
+    dd {
+      text-align: left;
+      font-size: medium;
+      font-weight: bold;
+      margin-left: 120px;
+    }
+
+   /* 적립금 히스토리  */
+    .emoney-col {
+      text-align: center; 
+      padding: 20px 0px; 
+      border-top: 2px solid black;
+      border-bottom: 1px solid black;
+    }
+    .emoney-row {
+      text-align: center; 
+      padding: 20px 0px; 
+      border-bottom: 1px solid lightgray;
+    }
+    .emoney-col> div {
+      font-weight: bold;
+      font-size: small;
+      letter-spacing: -1px;
+    }
+  
+    /* 날짜 */
+    .reg-date { 
+      width: 119px;
+    }
+    /* 내용 */
+    .detail {
+      width: 437px; text-align: left; padding-left: 20px;
+    }
+    /* 유효기한 */
+    .expire-date {
+      width: 121px;
+    }
+    /* 금액 */
+    .point {
+      width: 139px;
+      font-weight: bold;
+    }
+    
+    /* 포인트 금액별 색상 */
+    .plusPoint {
+      color: #692498;
+    }
+    .minusPoint {
+      color:  #666666;
+    }
+
+    /* 페이징 영역 */
+    .pagination {
+      text-align: center;    
+      margin-top: 60px;
+    }
+
+    .paginationBtn {
+      background-color: white;
+      border: 1px solid lightgray;
+      width: 33px !important;
+      height: 32px ;
+    }
+    .paginationBtn > i {
+      font-size: small;
+      font-weight: bold;
+      color: gray;
+    }
+    .paginationBtn:hover {
+      background-color: #FEF7FF;
+    }
+  

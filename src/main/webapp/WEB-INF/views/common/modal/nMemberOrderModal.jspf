@@ -1,0 +1,86 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<style>
+	.nMemeberOrderTb, .nMemeberOrderTb2 {
+		margin:10px;
+		width:100%;
+	}
+	.nMemeberOrderTb th, .nMemeberOrderTb2 th {
+		width:100px;
+		font-weight: bold;
+		font-size: 0.9rem;
+	}
+	.nMemeberOrderTb td, .nMemeberOrderTb2 td {
+		padding:5px;
+		font-size: 0.8rem;
+	}
+
+</style>
+
+<div class="modal" id="nMemberOrderModal">
+	<div class="modal-dialog modal modal-dialog-centered">
+		<div class="modal-content">
+		  
+		<div class="modal-header" style="border:none;margin:20px 0 0 10px;">
+			<div class="text-center text-dark font-weight-bold" style="font-size:1.2rem;">
+				비회원 주문 내역 조회
+			</div>
+		</div>
+		
+		<!-- Modal body -->
+		<div class="modal-body" style="margin:0 10px;">
+			<div>
+				<div class="text-secondary font-weight-bold" style="padding:10px;">
+					주문 정보
+				</div>
+				<table class="nMemeberOrderTb">
+		       		<tr>
+			            <th class="text-dark">주문 번호</th>
+			            <td id="nMemberOrderNum" class="text-secondary">
+						</td>
+			        </tr>
+		       		<tr>
+			            <th class="text-dark">받으실 분</th>
+			            <td id="nMemberOrderName" class="text-secondary">
+						</td>
+			        </tr>
+			        <tr>
+		            	<th class="text-dark">휴대폰</th>
+		            	<td id="nMemberOrderPhone" class="text-secondary">
+						</td>
+		        	</tr>
+					 <tr>
+						<th class="text-dark">주소</th>
+		            	<td id="nMemberOrderAddr" class="text-secondary">
+						</td>
+				 	</tr>
+					 <tr>
+						<th class="text-dark">배송 시간</th>
+		            	<td id="nMemberOrderDelivery" class="text-secondary">
+						</td>
+				 	</tr>
+	   			</table>
+			</div>
+			<div style="padding-top:30px;">
+				<div class="text-secondary font-weight-bold" style="padding:10px;">
+					주문 상품
+				</div>
+				<table class="nMemeberOrderTb2">
+	   			</table>
+			</div>
+			<div id="nMemberTotPrice" class="text-right text-secondary font-weight-bold" style="padding:10px;">
+			</div>
+		</div>
+		
+		<!-- Modal footer -->
+		<div class="modal-footer" style="border:none;margin-top:0px;">
+			<button type="button" class="btn btn-secondary font-weight-bold" data-dismiss="modal"
+				style="width:80px;border:1px solid #9A30AE;background-color:#9A30AE;border-radius:3px;padding:10px;color:white;font-size:1rem;">
+				 확인
+			</button>
+		</div>
+		   
+		</div>
+	</div>
+</div>

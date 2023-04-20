@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GoodsDAO">
+
+	<!-- 상품 -->
+	<select id="getGoods" resultType="goods">
+		SELECT P.PRODUCT_NUM PRODUCT_NUM, P.PRODUCT_NAME PRODUCT_NAME, P.DESCRIPTION AS P_DESCRIPTION, P.PRICE PRICE
+		, P.DIS_RATE DIS_RATE, P.SALEPRICE SALEPRICE, P.REGDATE REGDATE, P.COUNT COUNT, P.STOCK STOCK
+		, P.THUM_ORI_FILENAME THUM_ORI_FILENAME, P.THUM_SYS_FILENAME THUM_SYS_FILENAME, P.DETAILE_ORI_FILENAME DETAILE_ORI_FILENAME
+		, P.DETAILE_SYS_FILENAME DETAILE_SYS_FILENAME, DE.DELIVERY_TYPE DELIVERY_TYPE, DE.DESCRIPTION AS DE_DESCRIPTION
+		, P.SELLER SELLER, P.PRODUCT_DEL PRODUCT_DEL, P.DIS_DATE DIS_DATE, DI.DIVISION DIVISION, C.CONDITION CONDITION
+		FROM PRODUCT P, DIVISION DI, PACKAGE_CONDITION C, DELIVERY DE
+		WHERE P.DIVISION_NUM = DI.DIVISION_NUM
+		    AND P.STORAGE_NUM = C.STORAGE_NUM
+		    AND P.DELIVERY_CODE = DE.DELIVERY_CODE
+            AND P.PRODUCT_NUM = #{productNum }
+	</select>	
+
+	<!-- 후기 전체 조회 -->
+	<select id="getReviewList" parameterType="goodsReview" resultType="goodsReview">
+		SELECT M.NAME, M.GRADE, P.* 
+		FROM MEMBER M, PRO_REVIEW P
+		WHERE PRODUCT_NUM = #{productNum}
+		AND M.MEMBER_NUM = P.MEMBER_NUM
+		ORDER BY REVIEW_NUM DESC
+	</select>
+
+	<!-- 후기 1개 조회 -->
+	<select id="getReview" resultType="goodsReview">
+		SELECT *
+		FROM PRO_REVIEW
+		WHERE REVIEW_NUM = #{reviewNum}
+	</select>
+	
+	<!-- 후기 입력 -->
+	<insert id="insertReview" parameterType="goodsReview">
+		INSERT INTO PRO_REVIEW (REVIEW_NUM, ORDER_NUM, PRODUCT_NUM, MEMBER_NUM, R_CONTENT, 
+								R_ORI_FILENAME, R_SYS_FILENAME, R_DATE, REC, POINT)
+		VALUES (PRO_REVIEW_SEQ.NEXTVAL, #{orderNum }, #{productNum }, #{memberNum } 
+				, #{rContent}, #{rOriFilename}, #{rSysFilename}, SYSDATE, #{rec}, #{point})
+	</insert>
+	
+	<update id="updatePoint" parameterType="goodsReview">
+		UPDATE PRO_REVIEW
+		SET POINT = #{point}
+		WHERE MEMBER_NUM = #{memberNum}
+	</update>
+
+	<!-- 후기 수정 -->
+	<update id="updateReview" parameterType="goodsReview">
+		UPDATE PRO_REVIEW
+		SET R_CONTENT = #{rContent},
+			R_ORI_FILENAME = #{rOriFilename}
+		WHERE REVIEW_NUM = #{reviewNum}	
+	</update>
+
+	<!-- 후기 삭제 -->
+	<delete id="deleteReview" parameterType="goodsReview">
+		DELETE FROM PRO_REVIEW WHERE REVIEW_NUM = #{reviewNum}
+	</delete>
+	
+	<!-- 후기 개수 -->
+	<select id="getReviewCount" parameterType="goodsReview" resultType="int">
+		SELECT COUNT(REVIEW_NUM)
+		FROM PRO_REVIEW
+		WHERE PRODUCT_NUM = #{productNum}
+	</select>
+	
+	<!-- 후기 등록여부 체크 -->
+	<select id="checkReviewNotYet" parameterType="map" resultType="goodsReview">
+		SELECT P.ORDER_NUM, P.PRODUCT_NUM, P.MEMBER_NUM, P.COUNT, P.REVIEW_STATUS, O.ORDER_DATE
+		FROM ORDER_PRODUCT P, ORDERS O
+		WHERE P.MEMBER_NUM = #{memberNum }
+		AND P.REVIEW_STATUS = 'N'
+		AND P.PRODUCT_NUM = #{productNum }
+	</select>
+	
+	<!-- 후기 상태 변경 -->
+	<update id="updateReviewState" parameterType="goodsReview">
+		UPDATE ORDER_PRODUCT
+ 		SET REVIEW_STATUS = 'Y' 
+		WHERE PRODUCT_NUM = #{productNum} AND
+        MEMBER_NUM =  #{memberNum} AND 
+        ORDER_NUM = #{orderNum}
+	</update>
+	
+	
+	<!-- 문의 전체 조회 -->
+	<select id="getQnAList" parameterType="goodsQnA" resultType="goodsQnA">
+		SELECT * FROM PRO_QNA
+		WHERE PRODUCT_NUM = #{productNum}
+		ORDER BY PRO_QNA_NUM DESC
+	</select>	
+
+ 
+ 	<!-- 중복확인 -->
+ 	<select id="reviewDoubleCheck" parameterType="map" resultType="int">
+ 		SELECT COUNT(*) FROM PRO_REVIEW WHERE MEMBER_NUM = #{memberNum } AND PRODUCT_NUM = #{productNum }
+ 	</select>
+ 	
+	<!-- 문의 입력 -->
+	<insert id="insertQnA" parameterType="goodsQnA">
+		INSERT INTO PRO_QNA (PRO_QNA_NUM, PRODUCT_NUM, MEMBER_NUM, 
+							Q_TITLE, Q_CONTENT, Q_DATE, Q_STATUS, Q_SECRET)
+		VALUES(PRO_QNA_SEQ.NEXTVAL, #{productNum }, #{memberNum },
+				#{qTitle }, #{qContent }, SYSDATE, 'N', #{qSecret})		
+	</insert>
+	
+	
+
+	<!-- 문의 수정 -->
+	<update id="updateQnA" parameterType="goodsQnA">
+		UPDATE PRO_QNA
+		   SET Q_TITLE = #{qTitle},
+		   	   Q_CONTENT = #{qContent}
+		 WHERE PRO_QNA_NUM = #{proQnaNum}
+	</update>
+	
+	<!-- 문의 삭제 -->
+	<delete id="deleteQnA" parameterType="goodsQnA">
+		DELETE FROM PRO_QNA WHERE PRO_QNA_NUM = #{proQnaNum}
+	</delete>
+	
+	<!-- 관리자 문의 전체 조회 -->
+	<select id="getQList" parameterType="goodsQnA" resultType="goodsQnA">
+		SELECT P.PRODUCT_NAME , Q.*
+        FROM PRO_QNA Q , PRODUCT P 
+        WHERE P.PRODUCT_NUM = Q.PRODUCT_NUM 
+		ORDER BY Q_DATE DESC
+	</select>	
+
+	<!-- 문의 1개 조회 -->
+	<select id="getQnA" resultType="goodsQnA">
+        SELECT P.PRODUCT_NAME , Q.*
+        FROM PRO_QNA Q , PRODUCT P
+        WHERE P.PRODUCT_NUM = Q.PRODUCT_NUM
+        and q.pro_qna_num = #{proQnaNum}
+	</select>
+	
+	
+	<!-- 문의 답변  -->
+	<update id="answerQna" parameterType="goodsQnA">
+		UPDATE PRO_QNA 
+		SET A_ANSWER = #{aAnswer} 
+		WHERE PRO_QNA_NUM = #{proQnaNum} 
+	</update>
+	
+	
+	
+</mapper>

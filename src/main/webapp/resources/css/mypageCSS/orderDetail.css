@@ -1,0 +1,166 @@
+ .col-sm-6 {
+      padding: 15px;
+      padding-right: 40px;
+    }
+    .mypage-top3{
+      width: 100%; 
+      height: 100px;
+      border-bottom: 2px solid black;
+    }
+    .mypage-top4{
+      padding: 0px;
+      /* padding: 20px 0px 15px 0px; */
+    }
+
+    .orderNumArea {
+      margin-right: 20px; 
+    }
+    /* 마이페이지 컨텐츠 css*/
+
+    .order-list-continer {
+      width: 820px;
+      height: 127px;
+      padding:24px 0px;
+      border: 14px 0px 16px;
+      margin: 0px 20px;
+      border-bottom: 1px solid lightgrey;
+    }
+    .bold {
+      font-weight: bold;
+    }
+
+    /* 1:1 문의하기 */
+    #inquiryLink {
+      float: right; 
+      margin-right: -10px; 
+      margin-top: -40px;
+    } 
+    /* 상품썸네일*/ 
+    .order-item-thumb {
+      float: left;
+    }
+    img {
+      width: 60px;
+      height: 78px;
+      margin-right: 20px; 
+    }
+
+    /* 구매 제품 박스 영역*/
+    .order-item-date {
+      width: 860px;
+      border-bottom: 0.5px solid grey;
+      padding: 8px 0px 13px;
+    }
+    .order-item-date a{
+      font-size: small;
+      color: grey;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* 상품 설명 */
+    dl {
+      width: 630px;
+    }
+    dt {
+      font-size: small;
+      padding: 5px;
+    }
+    .order-item-info {
+      text-align: left;
+      margin-bottom: 0px;
+    }
+
+    .order-item-name{
+      padding-top: 15px;
+    }
+
+    /* 장바구니에 담기 영역*/
+    .order-item-status {
+      width: 100px;
+      margin-top: 25px;
+    }
+    .order-item-addCart {
+      width: 100px;
+      margin-top: 20px;
+    }
+
+      /* 버튼 */
+    .purpleBtn {
+      background-color: #692498; 
+      color: white; 
+      width: 96px; 
+      height: 36px;
+      font-size: small;
+    }
+
+    /* 주문정보영역 */
+
+    .whiteBtn {
+      background-color: white; 
+      color: #692498; 
+      border: 1px solid #692498;
+      width: 180px; 
+      height: 56px;
+      font-size: small;
+    }
+    .greyBtn {
+      background-color: white; 
+      color: lightgray; 
+      border: 1px solid lightgray;
+      width: 180px; 
+      height: 56px;
+      font-size: small;
+    }
+    h5 {
+      margin: 0px;
+      padding-bottom: 20px;
+    }
+    ul {
+      padding: 0px;
+    }
+    li {
+      list-style: none;
+      padding-top: 20px;
+    }
+    li > span {
+      font-size: small;
+    }
+
+    /* 장바구니 담기/주문취소 버튼영역 */
+    .allAddCancle {
+      text-align: center;
+      margin: 40px 0px;
+    }
+    .notice {
+      margin-bottom: 60px;
+      text-align: center;
+      font-size: small;
+      color: #666666;
+    }
+    
+    .infoTitle{
+      font-weight: bold;
+      padding-bottom: 20px;
+      border-bottom: 2px solid black;
+    }
+    .infoContent {
+      padding-bottom: 30px;
+      border-bottom: 1px solid lightgrey;
+      margin-bottom: 60px;
+    }
+    .title1 {
+      display: inline-block;
+      width: 700px;
+      color: #666666;
+    } 
+    .title1 ~ .content {
+      display: inline-block;
+      width: 150px;
+      text-align: right;
+    }
+    .title2 {
+      display: inline-block;
+      width: 190px;
+      color: #666666;
+    } 

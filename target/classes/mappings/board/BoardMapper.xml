@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardDAO">
+	<!-- 공지사항  -->
+	<select id="getNoticeList" parameterType="board" resultType="board">
+      SELECT *
+		  FROM (SELECT ROWNUM R_NUM, B.*
+		          FROM (SELECT *
+		                FROM NOTICE 
+		                ORDER BY NOTICE.NOTICE_NUM 
+		                ) B  
+		       ) 
+		WHERE R_NUM BETWEEN 1 AND 10
+		ORDER BY R_NUM DESC
+	</select>
+	
+	<select id="getNotice" parameterType="board" resultType="board">
+		SELECT *
+		FROM NOTICE WHERE NOTICE_NUM = #{noticeNum} 
+	</select>
+	
+	<insert id="insertNotice" parameterType="board">
+		INSERT INTO NOTICE (NOTICE_NUM,NOTICE_TITLE,NOTICE_CONTENT,NOTICE_DATE)
+	 	VALUES ((SELECT NVL(MAX(NOTICE_NUM),0) + 1 FROM NOTICE), #{noticeTitle},#{noticeContent},SYSDATE)
+	</insert>
+	
+	<update id="updateNotice" parameterType="board">
+		UPDATE NOTICE 
+		SET NOTICE_TITLE = #{noticeTitle}, 
+		    NOTICE_CONTENT = #{noticeContent} 
+		WHERE NOTICE_NUM = #{noticeNum} 
+	</update>
+	
+	<delete id="deleteNotice" parameterType="board">
+		DELETE FROM NOTICE WHERE NOTICE_NUM = #{noticeNum}
+	</delete>
+	 
+<!-- FAQ 
+	<select id="getFaqList" parameterType="faq" resultType="faq">
+	SELECT * 
+	FROM FAQ
+	ORDER BY FAQ_NUM DESC
+	</select>
+	 
+	<select id="getFaq" parameterType="faq" resultType="faq">
+		SELECT * 
+		FROM FAQ
+		ORDER BY FAQ_NUM DESC
+	</select>
+	
+	<insert id="insertFaq" parameterType="faq">
+		INSERT INTO FAQ (FAQ_NUM,FAQ_TYPE,FAQ_TITLE,FAQ_CONTENT)
+	 	VALUES ((SELECT NVL(MAX(FAQ_NUM),0) + 1 FROM FAQ),#{faqType}, #{faqTitle},#{faqContent})
+	</insert>
+	
+	<update id="updateFaq" parameterType="faq">
+		UPDATE FAQ 
+		SET FAQ_TITLE = #{faqTitle}, 
+		    FAQ_CONTENT = #{faqContent} 
+		WHERE FAQ_NUM = #{faqNum} 
+	</update>
+	
+	<delete id="deleteFaq" parameterType="faq">
+		DELETE FROM FAQ WHERE FAQ_NUM = #{faqNum}
+	</delete> -->
+
+</mapper>
+
+
+
+
+
+

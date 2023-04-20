@@ -1,0 +1,356 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib  prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
+
+<script>
+	function kakaoLogout() {	
+		location.href="https://kauth.kakao.com/oauth/logout?" +
+						"client_id=1de1359a671db7dcbf8be4aa691ce92d"+ //YOUR_REST_API_KEY
+						"&logout_redirect_uri=http://localhost:8080/collabee/member/logout.do";
+	}	
+	
+	function go_search(){
+		let sword = $("#search-input").val();
+		location.href = "../collections/search.do?sword=" + sword;
+	}
+	
+	let cartProductNum2;
+	let resultType;
+	
+	function getBtnSignal(productNum, type){
+		cartProductNum2 = productNum;
+		resultType= type;
+		$("#cart-alert-btn").trigger('click');
+	}
+	
+	$(document).ready(function(){
+        $("#cart-alert-btn").click(function(){
+        	
+          getCartAlertInfo(cartProductNum2); 
+          $('.toast').toast('show');
+
+          $('.toast').toast({maxWidth: "350px", delay:20000});
+        });
+      });
+	
+	function getCartAlertInfo(productNum) {
+		
+			$.ajax({
+				type: "POST",
+				url: "../collections/getGood.do",
+				data: 
+					JSON.stringify({
+						productNum : productNum
+					}),
+				contentType: "application/json",
+				dataType: "json",
+				success: function(data){
+					
+						$("#cart-alert-productName").html(data.productName);
+						$("#cart-alert-img").attr("src", "../resources/imgs/goods/" + data.thumSysFilename);
+					if (resultType == 1) {
+						$("#addCartComment").html("장바구니에 상품을 담았습니다.");
+					} else if (resultType == 2) {
+						$("#addCartComment").html("이미 담은 상품의 수량을 추가했습니다.");
+					} else if (resultType == 3) {
+						$("#addCartComment").html("최대 수량을 초과하였습니다.");
+					} else {
+						alert("에러발생~");
+					}
+				},
+				error: function(){
+					alert("실패");
+				}
+			}); 
+	} 
+	
+	$(function() {
+		
+		//휴대폰 11글자 입력 표기 
+		$("#nOrderPhone").keyup(function(e) {
+			if ($('#nOrderPhone').val().length != 11){
+				$('.chkPhone').css('display', 'block');
+			} else {
+				$('.chkPhone').css('display', 'none');
+			}
+		});
+		
+	});
+	// 숫자 1000단위 표기
+	function addComma(value){
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return value; 
+	}
+	function order_Chk(){
+		if ($('#nOrderName').val().replace(/\s/gi, "") != '') {
+			if ($('#nOrderPhone').val().replace(/\s/gi, "") != '') {
+				if ($('#nOrderPhone').val().length == 11) {
+					var orderNameChk = $('#nOrderName').val();
+					var orderPhoneChk = $('#nOrderPhone').val();
+					
+					var sendOrderChkData = {
+							orderName : orderNameChk,
+							orderPhone : orderPhoneChk,
+						};
+					$.ajax({
+						type: "POST",
+						url: "../order/orderChk.do",
+						data: JSON.stringify(sendOrderChkData),
+						contentType: "application/json",
+						success: function(data){
+							if (data.result == 1) {
+								$('#orderChkModal').modal('hide');
+								$('#nMemberOrderModal').modal('show');
+								
+								var phoneSub = data.nOrders.orderPhone.substring(0,3) + '-' + data.nOrders.orderPhone.substring(3,7) + '-' + data.nOrders.orderPhone.substring(7,11);
+								var delSub = data.nOrders.deliveryPick.substring(8,10) + '일 ' + data.nOrders.deliveryPick.substring(11,13) + '시 예정';
+								
+								$('#nMemberOrderNum').html(data.nOrders.orderNum);
+								$('#nMemberOrderName').html(data.nOrders.orderName);
+								$('#nMemberOrderPhone').html(phoneSub);
+								$('#nMemberOrderAddr').html(data.nOrders.orderAddr + ' ' + data.nOrders.orderAddrDetail);
+								$('#nMemberOrderDelivery').html(delSub);
+								
+								var totSub = '총 결제 금액 <span class="text-dark text-right" style="font-size:1.2rem;"> ' + addComma(String(data.nOrders.totPrice)) + ' 원</span>';
+								$('#nMemberTotPrice').html(totSub);
+								var nMemberOrderGoods = '';
+								$.each(data.nOrderGoods, function(index, goods){
+									nMemberOrderGoods += '<tr>';
+									nMemberOrderGoods += '<th class="text-secondary" colspan="2">';
+									nMemberOrderGoods += goods.productName;
+									nMemberOrderGoods += '</tr>';
+									nMemberOrderGoods += '<tr>';
+									nMemberOrderGoods += '<th class="text-center text-secondary">';
+									nMemberOrderGoods += goods.count + ' 개';
+									nMemberOrderGoods += '</th>';
+									nMemberOrderGoods += '<td class="text-dark">';
+									
+									var	nMgoodsPrice = goods.price * goods.count;
+									
+									if (goods.saleprice == goods.price) {
+										nMemberOrderGoods += '<span class="text-right text-secondary" style="width:200px;">';
+										nMemberOrderGoods += addComma(String(nMgoodsPrice)) + ' 원';
+										nMemberOrderGoods += '</span>';
+									} else {
+										var nMgoodsSalePrice = goods.saleprice * goods.count;
+										nMemberOrderGoods += '<span class="text-right text-secondary" style="width:200px;">';
+										nMemberOrderGoods += addComma(String(nMgoodsSalePrice)) + ' 원';
+										nMemberOrderGoods += '<span class="text-secondary text-right" style="font-size:0.8rem;"><del>';
+										nMemberOrderGoods += addComma(String(nMgoodsPrice)) + ' 원';
+										nMemberOrderGoods += '</del></span></span>';
+									}
+									nMemberOrderGoods += '</td>';
+									nMemberOrderGoods += '</tr>';
+								});
+								$('.nMemeberOrderTb2').html(nMemberOrderGoods);
+							} else {
+								alertWarning('주문 정보가 존재하지 않습니다.');
+							}
+						},
+						error: function(){
+						}
+					}); 
+				} else {
+					alertWarning('휴대폰 번호 11자리를 모두 입력해주세요.');
+				}
+			} else {
+				alertWarning('휴대폰 번호를 입력해주세요.');
+			}
+		} else {
+			alertWarning('이름을 입력해주세요.');
+		} 
+	}
+	function alertWarning(msg) {
+		Swal.fire({
+			icon: 'warning',
+			title: '', 
+			text: msg,
+			showConfirmButton: false,
+			timer: 1500
+		});
+	}
+</script> 
+<style>
+
+	#cart-toast-box {
+		position: fixed;
+		z-index:12;
+		right: 8;
+		top: 3;
+		height: 140px;
+		right: 0px;
+		top: 80px;
+	}
+	
+	#cart-toast {
+		display: flex;
+		z-index:10;
+		width: 500px;
+		height: 110px;
+	}
+	
+	#cart-toast div {
+		height: 100%;
+	}
+	
+	#cart-toast div:first-child{
+		padding: 5px;
+		margin-right: 5px;
+		width: 100px;
+		height: 120px;
+		padding-bottom: 5px;
+	}
+	
+	.root {
+		$toast-max-width: 500px;
+	}
+	
+</style>
+	<%@ include file= "../common/modal/orderChkModal.jspf"%>
+	<%@ include file= "../common/modal/nMemberOrderModal.jspf"%>
+	<!-- 최상단 이동 버튼 -->
+	<button id="moveTopBtn" style="border: solid 1px black;"><i class="fa-solid fa-arrow-up"></i></button>
+	<!-- 장바구니 토스트 실행 버튼 -->
+	<button type="button" class="btn btn-primary" id="cart-alert-btn" style="display: none;">Show Toast</button>
+	
+	<div id="cart-toast-box" class="toast" data-delay="4000">
+		<div class="toast-body" id="cart-toast" style="width: 500px;">
+			<div>
+				<img id="cart-alert-img" src="../resources/imgs/goods/collection_4_1_chima.jpg" style="width: 100%; height: 100%;">
+			</div>
+			<div style="width: 80%;">
+				<div style="position: relative; top: 10px; font-size: 18px; width: 230px; font-weight: 800;"><p id="cart-alert-productName" style="width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></p></div>
+				<div id="addCartComment" style="position: relative; top: -50px; font-size: 18px; width: 100%;">상품을 장바구니에 담았습니다!</div>
+			</div>
+		</div>
+	</div> 
+	
+	<div class="row">
+	    <div class="col-sm-2"></div>
+	    <div class="col-sm-8 header-top"> 
+	    	<c:choose>
+   				
+   				<c:when test="${empty loginMember }">
+			        <ul>
+			            <li><a href="${pageContext.request.contextPath }/member/signup.do">회원가입</a>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;</li>
+			            <li><a href="../member/login.do">로그인</a>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;</li>
+			            <li>
+			            	<div class="dropdown support">
+			            		고객센터 <i class="fa-solid fa-chevron-down"></i>
+			                    <div class="dropdown-menu support-detail">
+			                    <a class="dropdown-item" href="${pageContext.request.contextPath }/board/notice.do">공지사항</a>
+			                    <a class="dropdown-item" href="${pageContext.request.contextPath }/faq/faq.do">자주하는 질문</a>
+			                    <a class="dropdown-item" href="${pageContext.request.contextPath }/inquiry/inquiry.do">1:1문의</a>
+			                    <a class="dropdown-item" data-toggle="modal" data-target="#orderChkModal">비회원 주문 조회</a>
+			                    </div>
+			                </div>
+			            </li>
+			        </ul>
+		        </c:when>
+		        <c:when test="${loginMember.id eq 'admin' and loginMember.password eq 'admin' }">
+		        	<ul>
+		        		<li>
+							<div class="dropdown support">
+			            		관리자모드 <i class="fa-solid fa-chevron-down"></i> &nbsp;&nbsp;|&nbsp;&nbsp;
+			                    <div class="dropdown-menu support-detail">
+			                    <a class="dropdown-item" href="../adminGoods/adminGoodsList.do">관리센터</a>
+			                    </div>
+			                </div>
+		                </li>
+		        		<li><a href="../member/logout.do">로그아웃</a></li>
+		        	</ul>
+		        </c:when>
+		        <c:otherwise>
+		        	<ul>
+			            <li><div class="dropdown support">
+			            		<button style="background-color: transparent; border: solid 1px #9A30AE; border-radius: 20px; font-size: 10px; height: 20px; color: #9A30AE; width: 50px; font-weight: 1000;">콜라비</button>
+			            		${loginMember.name }님 <i class="fa-solid fa-chevron-down"></i>
+			                    <div class="dropdown-menu support-detail">
+			                    <a class="dropdown-item" href="${pageContext.request.contextPath }/mypage/order.do">주문내역</a>
+			                    <a class="dropdown-item" href="${pageContext.request.contextPath }/mypage/review.do">상품후기</a>
+			                    <a class="dropdown-item" href="${pageContext.request.contextPath }/mypage/inquiryProduct.do">상품문의</a>
+			                    <a class="dropdown-item" href="${pageContext.request.contextPath }/mypage/emoney.do">적립금</a>
+			                    <a class="dropdown-item" href="${pageContext.request.contextPath }/mypage/coupon.do">쿠폰</a>
+			                    <a class="dropdown-item" href="${pageContext.request.contextPath }/mypage/info.do">개인정보수정</a>
+			                    <a class="dropdown-item" href="#" onclick="kakaoLogout()" >로그아웃</a>
+			                    </div>
+			                </div>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;</li>
+			            <li>
+			            	<div class="dropdown support">
+			            		고객센터 <i class="fa-solid fa-chevron-down"></i>
+			                    <div class="dropdown-menu support-detail">
+			                    <a class="dropdown-item" href="${pageContext.request.contextPath }/board/notice.do">공지사항</a>
+			                    <a class="dropdown-item" href="${pageContext.request.contextPath }/faq/faq.do">자주하는 질문</a>
+			                    <a class="dropdown-item" href="${pageContext.request.contextPath }/inquiry/inquiry.do">1:1문의</a>
+			                    </div>
+			                </div>
+			            </li>
+			
+			        </ul>
+		        </c:otherwise>
+	        
+	        </c:choose>
+
+	    </div>
+	    <div class="col-sm-2"></div>
+	</div>
+	<div class="row">
+	    <div class="col-sm-2"></div>
+	    <div class="col-sm-8 header">
+	        <div><a href="../collections/main.do"><img class="main-logo" src="${pageContext.request.contextPath}/resources/imgs/logo/main_logo.png"></a></div>
+	        <div class="input-box"><input id="search-input" class="search-box" type="text" placeholder="검색어를 입력해주세요" onKeyPress="if( event.keyCode==13 ){go_search();}">
+
+	            <button style="position: relative; left: 30px;" onclick="go_search()"><i style="display:relative; left: 0px;"class="fa-solid fa-magnifying-glass"></i></button>
+	        </div>
+	        <div>
+	            <ul>
+	                <li><button><i class="fa-regular fa-bell"></i></button></li>
+	                <li><button onclick="location.href='${pageContext.request.contextPath }/mypage/picklist.do'"><i class="fa-regular fa-heart"></i></button></li>
+	                <li><button onclick="location.href='${pageContext.request.contextPath}/cart/cart.do'"><i class="fa-solid fa-cart-shopping"></i></button></li>
+	            </ul>
+	        </div>
+	    </div>
+	    <div class="col-sm-2"></div>
+	</div>
+	
+	<div class="row navbar-layer">
+	    <div class="col-sm-2"></div>
+	    <div class="col-sm-8 navbar">
+	        <div class="left-side">
+	            <div class="dropdown category-button">
+	                <i class="fa-solid fa-bars"></i>&nbsp;&nbsp;
+	                카테고리
+	                <div class="dropdown-menu category-detail  overflow-auto" style="background-color: transparent; border: none; z-index: 10;">
+	                    <div id="category-box" style="display: flex; background-color: 0;">
+	                        <div class="list-group" id="main-category" style="background-color: white;">
+		                        <c:forEach var="categoryVO" items="${categories }" varStatus="status">
+		                            <a name="${categoryVO.categoryNum }" href="${pageContext.request.contextPath}/collections/categories.do?categoryNum=${categoryVO.categoryNum }" class="list-group-item list-group-item-action category-list">
+		                            <img src="${pageContext.request.contextPath}/resources/imgs/icons_catetory/icon_maincategory_${status.index +1 }.png">${categoryVO.category }</a>
+	                            </c:forEach>
+	                        </div>
+	                        
+<!-- header-navbar의 상세 카테고리 Ajax부분 -->
+	                        <div style="height: inherit;" id="sub-category-box">
+								<div class="list-group" id="sub-category">
+	                        	</div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="center-side">
+	            <ul>
+	                <li><a href="${pageContext.request.contextPath}/collections/market-newproduct.do">신상품</a></li>
+	                <li><a href="${pageContext.request.contextPath}/collections/market-best.do">베스트</a></li>
+	                <li><a href="${pageContext.request.contextPath}/collections/event.do">이벤트</a></li>
+
+	            </ul>
+	
+	        </div>
+	        <div class="right-side">
+	            <a href="../collections/about_delivery.do"> <span>샛별・낮</span> 배송안내</a>
+
+	        </div>
+	    </div>
+	    <div class="col-sm-2"></div>
+	</div>

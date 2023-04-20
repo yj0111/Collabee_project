@@ -1,0 +1,117 @@
+ .col-sm-6 {
+      padding: 15px;
+      padding-right: 40px;
+    }
+    .mypage-top3{
+      border-bottom: 2px solid black;
+    }
+    .mypage-top4{
+      padding: 50px 15px 15px 15px;
+    }
+
+    .modifyForm {
+      padding: 7px 60px 7px 120px;
+    } *
+
+    /* 수정 폼 */
+    .form2 input:focus {
+      /* border: 1px solid #692498;
+      border-radius: 5px;
+      padding: 2px 5px; */
+      outline: none;
+   
+    }
+
+    #text-right{
+        text-align: right;
+        width: 100%;     
+    }
+    .form-inline{
+        padding: 10px 20px;
+    }
+    .form-control{
+        height: 46px;
+        width: 100%;
+        padding: 0px 11px 1px 15px;
+    }
+    .form1 {
+        width: 139px;
+        text-align: left;
+    }
+    .form2 {
+        height: 46px;
+        width: 333px;
+    }
+    .form3 {
+        width: 120px;
+    }
+
+    .input-area {
+        margin-bottom: 5px;
+    }
+
+    .birthFrmGroup {
+      width: 96px;
+      height: 40px;
+      text-decoration: none;
+      border: none;
+       text-align: center;
+    }
+    .bi-slash-lg {
+      line-height: 40px;
+      vertical-align: middle;
+    }
+
+    /* 유효성검사 */
+    .hide {
+        display: none;
+    }
+
+    .red-message {
+        font-size: small;
+        font-weight: bold;
+        color: red;
+    }
+    .purple-message {
+    	font-size: small;
+        font-weight: bold;
+        color: purple;
+    }
+     /* 중복확인 버튼 */
+     .chk-button{
+      width: 120px;
+      height: 44px;
+      background-color: white;
+      color:#692498 ;
+      border: 0.1px solid #692498;
+      border-radius: 5px;
+      padding: 0px 10px;
+      margin: 0px 0px 0px 8px;
+    }
+
+    /* 성별체크 라디오 */
+    .genchk{
+      width: 65px;
+      margin: 12px;
+    }
+
+    .form-check-label{
+      font-size: small;
+      font-weight: 200;
+      letter-spacing: -1px;
+    }
+
+      /* 버튼 */
+    #purpleBtn {
+      background-color: #692498; 
+      color: white; 
+      width: 120px; 
+      height: 44px;
+    }
+    #whiteBtn {
+      background-color: white; 
+      border: 1px solid #692498;
+      color: #692498; 
+      width: 120px; 
+      height: 44px;
+    }

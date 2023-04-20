@@ -1,0 +1,71 @@
+/* 쿠폰 목록  */
+    .emoney-col {
+      text-align: center; 
+      padding: 20px 0px; 
+      border-top: 2px solid black;
+      border-bottom: 1px solid black;
+    }
+    .emoney-row {
+      text-align: center; 
+      padding: 20px 0px; 
+      border-bottom: 1px solid lightgray;
+      font-size: small;
+    }
+    .emoney-col> div {
+      font-weight: bold;
+      font-size: small;
+      letter-spacing: -1px;
+    }
+
+    /* 쿠폰코드 */
+    .coupon-num { 
+      width: 200px;
+    }
+    /* 쿠폰명 */
+    .coupon-name {
+      width: 437px; text-align: left; padding-left: 20px;
+    }
+    /* 할인금액 */
+    .dis-price {
+      width: 121px;
+    }
+    /* 유효기한 */
+    .coupon-date {
+      width: 139px;
+      font-weight: bold;
+    }
+    /* 사용여부 */
+    .usage-state{
+      width: 139px;
+      font-weight: bold;
+    }
+    
+    /* 포인트 금액별 색상 */
+    .plusPoint {
+      color: #692498;
+    }
+    .minusPoint {
+      color:  #666666;
+    }
+
+    /* 페이징 영역 */
+    .pagination {
+      text-align: center;    
+      margin-top: 60px;
+    }
+
+    .paginationBtn {
+      background-color: white;
+      border: 1px solid lightgray;
+      width: 33px !important;
+      height: 32px ;
+    }
+    .paginationBtn > i {
+      font-size: small;
+      font-weight: bold;
+      color: gray;
+    }
+    .paginationBtn:hover {
+      background-color: #FEF7FF;
+    }
+  

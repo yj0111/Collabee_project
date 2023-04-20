@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="couponsDAO">
+	<insert id="couponsInsert" parameterType="coupons">
+		INSERT INTO COUPON VALUES(
+			COUPON_SEQ.NEXTVAL, #{couponName }, #{disPrice }
+			, #{couponDate }, #{regdate }, #{count }, #{leastCost }
+		)
+	</insert>	
+	
+	<insert id="insertCouponIntoCustom" parameterType="map">
+		INSERT INTO COUPON_BOX (MEMBER_NUM, COUPON_NUM, ISSUE_DATE, USAGE_STATE)
+		VALUES (#{member.memberNum }, #{coupons.couponNum }, SYSDATE, 'N')
+	</insert>
+	
+	<select id="couponsList" parameterType="coupons" resultType="coupons">
+		SELECT * FROM COUPON ORDER BY COUPON_NUM
+	</select>
+	
+	<select id="couponsListAvail" resultType="coupons">
+		SELECT * FROM COUPON 
+		WHERE COUPON_DATE NOT BETWEEN '2000/12/01' AND SYSDATE-1
+	</select>
+	
+	<select id="couoponsDoubleCheck" parameterType="map" resultType="coupons">
+		SELECT * FROM COUPON_BOX
+		WHERE MEMBER_NUM = #{member.memberNum } AND COUPON_NUM = #{coupons.couponNum }
+	</select>
+	
+	<select id="couponsSelect" parameterType="coupons" resultType="coupons">
+		SELECT * FROM COUPON WHERE COUPON_NUM = #{couponNum }
+	</select>
+	
+	<update id="couponsModify" parameterType="coupons">
+		UPDATE COUPON SET COUPON_NAME = #{couponName }, DIS_PRICE = #{disPrice }
+						, COUPON_DATE = #{couponDate }, COUNT = #{count }
+						, LEAST_COST = #{leastCost }
+		WHERE COUPON_NUM = #{couponNum } 
+	</update>
+	
+	
+	<delete id="couponsDelete" parameterType="coupons">
+		DELETE FROM COUPON WHERE COUPON_NUM = #{couponNum }
+	</delete>
+</mapper>
+
+
+
+
+
+

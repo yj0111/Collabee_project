@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberDAO">
+
+	<insert id="signup" parameterType="memberVO" >
+		INSERT INTO MEMBER (MEMBER_NUM, ID, PASSWORD, NAME, EMAIL, PHONE, ADDRESS, GENDER, BIRTH, ADDRESS_DETAIL)
+		VALUES (NVL((SELECT MAX(MEMBER_NUM) FROM MEMBER ), 0) + 1,
+				#{id}, #{password}, #{name}, #{email}, #{phone}, #{address}, #{gender}, #{birth}, #{addressDetail})
+	</insert>
+	
+	<update id="modify" parameterType="memberVO">
+		UPDATE MEMBER
+		SET PASSWORD = #{password}, NAME = #{name}, EMAIL = #{email}, PHONE = #{phone}, ADDRESS = #{address}, 
+		    ADDRESS_DETAIL = #{addressDetail} , GENDER = #{gender}, BIRTH = #{birth}
+		WHERE ID = #{id}
+	</update>
+	
+	<update id="leave" parameterType="memberVO">
+		UPDATE MEMBER
+		SET MEMBER_STATE = 'L', LEAVE_DATE = SYSDATE
+		WHERE ID = #{id}
+	</update>
+	
+	<select id="getMember" parameterType="String" resultType="memberVO">
+		SELECT *
+		FROM MEMBER
+		WHERE ID = #{id} OR EMAIL= #{email}
+	</select> 
+	
+	
+	<select id="confirmId" parameterType="String" resultType="String">
+		SELECT ID
+		FROM MEMBER
+		WHERE ID = #{id}
+	</select>
+	
+	
+	<select id="confirmEmail" parameterType="String" resultType="String">
+		SELECT EMAIL
+		FROM MEMBER
+		WHERE EMAIL = #{email}
+	</select>
+	
+	<select id="confirmModifyEmail" parameterType="memberVO" resultType="memberVO">
+		SELECT *
+		FROM MEMBER
+		WHERE EMAIL = #{email}
+	</select>
+	
+	
+	<select id="login" parameterType="memberVO" resultType="memberVO">
+		SELECT *
+		FROM MEMBER
+		WHERE ID = #{id} AND PASSWORD = #{password}
+	</select>
+	
+	
+	<select id="findId" parameterType="memberVO" resultType="memberVO">
+		SELECT NAME, EMAIL, ID
+		FROM MEMBER
+		WHERE NAME = #{name} AND EMAIL = #{email}		
+	</select>
+	
+	
+	<select id="findPw" parameterType="memberVO" resultType="memberVO">
+		SELECT ID, PASSWORD
+		FROM MEMBER
+		WHERE ID = #{id} AND EMAIL = #{email}
+	</select>
+	
+	<select id="oldPwChk" parameterType="memberVO" resultType="memberVO">
+		SELECT PASSWORD
+		FROM MEMBER
+		WHERE ID = #{id}
+	</select>
+	
+	
+	
+</mapper>

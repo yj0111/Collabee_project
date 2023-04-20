@@ -1,0 +1,49 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!-- 관리자 답변 창 -->
+<!-- The Modal --> 
+  <div class="modal" id="myModal3">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h1 class="modal-title">문의 답변하기</h1>
+          <button type="button" class="close" data-dismiss="modal">×</button>
+        </div>
+
+        <div style="padding: 16px 0px; border-bottom: 1px solid lightgray;">
+            <div style="display: flex; margin-left: 20px; float: left; margin-right: 20px;">
+            <img src="image/1.jpg" alt="크림파스타" style="width: 72px; height: 72px; border-radius: 4px;">
+            </div>
+            <div style="display: flex; float: left; margin-top: 25px;">
+                <div>[최현석의 쵸이닷] 어쩌구구구</div><br>
+                <div>유통기한 언제까지 일까요(제목)</div>
+            </div>
+        </div>  
+
+        <!-- Modal body -->
+        <div class="modal-body" style="margin-left: 10px;">
+
+            <div style="float: left; margin-top: 10px;">
+            <div style="float: left; margin-right: 30px;">
+                <span>내용</span>    
+            </div>
+            <div style="float: left;">
+            <textarea class="form-control" rows="5" id="comment" name="text" inputmode="text" aria-label="textarea-message" 
+            name="content" class="textarea" style="border-radius: 0.2em; width: 670px; height: 250px;" 
+            placeholder="답변을 작성해주세요"></textarea>
+            </div>
+            </div>    
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" style="background-color: white; border: 1px solid lightgray; color: black;" data-dismiss="modal">취소</button>
+            <input type="submit" value="등록" style="background-color: #692498; color: white; width: 60px; height: 37px; border-radius: 0.2em; text-align: center; border: none;">
+          <!--<button type="button" style="background-color: #692498; color: white; width: 60px; height: 37px; border-radius: 0.2em;" disabled>등록</button>  -->     
+        </div>
+
+      </div>
+    </div>
+  </div>  

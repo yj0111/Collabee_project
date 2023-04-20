@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<context:component-scan base-package="com.spring.collabee"></context:component-scan>	
+ 	
+    <!-- email 인증 관련   -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com" />
+        <property name="port" value="587" />
+        <property name="username" value="market.collabee@gmail.com"/>
+        <property name="password" value="fsufdjgizvqnocze" />
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.debug">true</prop>
+                <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+				<prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+            </props>
+        </property>
+    </bean>
+ 	<!-- Spring-MyBatis 연동 설정 -->
+ 	<bean id="sqlSessionFactory"
+ 		class="org.mybatis.spring.SqlSessionFactoryBean">
+ 		<!-- 마이바티스 라이브러리에서 제공하는 객체임 -->
+				 			<!-- 아래 위치의 config 파일의 설정을 읽어서 처리 -->
+ 		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+ 		<property name="dataSource" ref="dataSource"></property>
+ 		<property name="mapperLocations" value="classpath:mappings/**/*Mapper.xml"></property>
+ 	</bean>
+ 	
+ 	<!-- 실제작업할때  SqlSessionTemplate 객체를 주입받아서 사용하게됨 -->
+ 	<bean class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory"/>
+ 	</bean>
+ 	
+ 	<!--  Spring JDBC 관련 설정 -->
+	<!-- DataSource 설정 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" 
+		destroy-method="close">
+		<!-- 사용하는 DB 접속관련 정보입력 -->
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+		<property name="username" value="collabee"/>	
+		<property name="password" value="collabee"/>	
+	</bean>
+
+</beans>

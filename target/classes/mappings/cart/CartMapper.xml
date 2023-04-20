@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cartDAO">
+	<!-- 상품 구매불가 여부 확인 -->
+	<select id="getProductStatus" parameterType="cart" resultType="goods">
+		SELECT PRODUCT_DEL, STOCK
+		FROM PRODUCT P
+		WHERE PRODUCT_NUM = #{productNum}
+	</select>
+	<!-- 비회원/회원 장바구니 상품 중복 여부 조회 -->
+	<select id="getCartNLogin" parameterType="cart" resultType="cart">
+		SELECT C.PRODUCT_NUM PRODUCT_NUM, C.COUNT COUNT, P.STOCK STOCK, C.NMEMBER_NUM NMEMBER_NUM
+		FROM CART C, PRODUCT P
+		WHERE C.PRODUCT_NUM = P.PRODUCT_NUM 
+		AND C.NMEMBER_NUM = #{nmemberNum}
+	</select>
+	<select id="getCartLogin" parameterType="cart" resultType="cart">
+		SELECT C.PRODUCT_NUM PRODUCT_NUM, C.COUNT COUNT, P.STOCK STOCK, C.MEMBER_NUM MEMBER_NUM
+		FROM CART C, PRODUCT P
+		WHERE C.PRODUCT_NUM = P.PRODUCT_NUM 
+		AND C.MEMBER_NUM = #{memberNum}
+	</select>
+	<!-- 비회원 장바구니 로그인 후 이동 -->
+	<update id="updateCartLogin" parameterType="cart">
+		UPDATE CART
+		SET MEMBER_NUM = #{memberNum},
+			NMEMBER_NUM = null,
+			NMEMBER_LIMIT = null
+		WHERE NMEMBER_NUM = #{nmemberNum}
+	</update>
+	<!-- 배송지 변경 -->
+	<update id="updateAddress" parameterType="memberVO">
+		UPDATE MEMBER
+		SET ADDRESS = #{address},
+			ADDRESS_DETAIL = #{addressDetail}
+		WHERE MEMBER_NUM = #{memberNum}
+	</update>
+	
+	<!-- 회원 등급 / 적립 조회 -->
+	<select id="getGrade" parameterType="memberVO" resultType="order">
+		SELECT MS.GRADE_NAME GRADE_NAME, MS.SAVERATE SAVERATE
+		FROM MEMBER M, MEMBERSHIP MS
+		WHERE M.GRADE = MS.GRADE
+		AND M.MEMBER_NUM = #{memberNum}
+	</select>
+
+	<!-- 비회원 유효기간 설정 -->
+	<update id="updateNmLimit" parameterType="cart">
+		UPDATE CART
+		SET NMEMBER_LIMIT = sysdate+3
+		WHERE NMEMBER_NUM = #{nmemberNum}
+	</update>
+	
+	<!-- 장바구니 상품 존재 여부 조회 -->
+	<select id="checkCartList" parameterType="cart" resultType="cart">
+		SELECT C.PRODUCT_NUM PRODUCT_NUM, P.STORAGE_NUM STORAGE_NUM, CT.CATEGORY_NUM CATEGORY_NUM, P.THUM_SYS_FILENAME THUM_SYS_FILENAME, P.PRODUCT_NAME PRODUCT_NAME, 
+				C.COUNT COUNT, P.PRICE PRICE, P.SALEPRICE SALEPRICE, P.STOCK STOCK
+		FROM CART C, PRODUCT P, CATEGORY CT, DIVISION D
+		WHERE C.PRODUCT_NUM = P.PRODUCT_NUM
+		AND P.DIVISION_NUM = D.DIVISION_NUM
+		AND D.CATEGORY_NUM = CT.CATEGORY_NUM
+		AND NOT P.PRODUCT_DEL = 'Y'
+		AND NOT P.STOCK = 0
+		<if test="memberNum != 0">
+		AND C.MEMBER_NUM = #{memberNum}
+		</if>
+		<if test="nmemberNum != null">
+		AND C.NMEMBER_NUM = #{nmemberNum}
+		</if>
+		AND C.PRODUCT_NUM = #{productNum}
+	</select>
+	
+	<!-- 장바구니 상품 추가 -->
+	<insert id="insertCart" parameterType="cart">
+		<if test="memberNum != 0">
+		INSERT INTO CART (MEMBER_NUM, PRODUCT_NUM, COUNT)
+		VALUES (#{memberNum}, #{productNum}, #{count})
+		</if>
+		<if test="nmemberNum != null">
+		INSERT INTO CART (PRODUCT_NUM, COUNT, NMEMBER_NUM)
+		VALUES (#{productNum}, #{count}, #{nmemberNum})
+		</if>
+	</insert>
+		
+	<!-- 장바구니 수량 변경 -->
+	<update id="updateCart" parameterType="cart">
+		UPDATE CART
+		SET COUNT = #{count}
+		WHERE PRODUCT_NUM = #{productNum}
+		<if test="memberNum != 0">
+		AND MEMBER_NUM = #{memberNum}
+		</if>
+		<if test="nmemberNum != null">
+		AND NMEMBER_NUM = #{nmemberNum}
+		</if>
+	</update>
+	
+	<!-- 장바구니 상품 삭제 -->
+	<delete id="deleteCart" parameterType="cart">
+		DELETE FROM CART
+		WHERE PRODUCT_NUM = #{productNum}
+		<if test="memberNum != 0">
+		AND MEMBER_NUM = #{memberNum}
+		</if>
+		<if test="nmemberNum != null">
+		AND NMEMBER_NUM = #{nmemberNum}
+		</if>
+	</delete>
+	
+	<!-- 장바구니 전체 수량 조회 -->
+	<select id="getCartCount" parameterType="cart" resultType="int">
+		SELECT COUNT(*) COUNT
+		FROM CART C, PRODUCT P
+		WHERE C.PRODUCT_NUM = P.PRODUCT_NUM
+		AND NOT P.PRODUCT_DEL = 'Y'
+		AND NOT P.STOCK = 0
+		<if test="memberNum != 0">
+		AND C.MEMBER_NUM = #{memberNum}
+		</if>
+		<if test="nmemberNum != null">
+		AND C.NMEMBER_NUM = #{nmemberNum}
+		</if>
+	</select>
+
+	<!-- 장바구니 전체 조회 -->
+	<select id="getCartList" parameterType="cart" resultType="cart">
+		SELECT C.PRODUCT_NUM PRODUCT_NUM, P.STORAGE_NUM STORAGE_NUM, CT.CATEGORY_NUM CATEGORY_NUM, P.THUM_SYS_FILENAME THUM_SYS_FILENAME, P.PRODUCT_NAME PRODUCT_NAME, 
+				C.COUNT COUNT, P.PRICE PRICE, P.SALEPRICE SALEPRICE, P.STOCK STOCK
+		FROM CART C, PRODUCT P, CATEGORY CT, DIVISION D
+		WHERE C.PRODUCT_NUM = P.PRODUCT_NUM
+		AND P.DIVISION_NUM = D.DIVISION_NUM
+		AND D.CATEGORY_NUM = CT.CATEGORY_NUM
+		<if test="memberNum != 0">
+		AND C.MEMBER_NUM = #{memberNum}
+		</if>
+		<if test="nmemberNum != null">
+		AND C.NMEMBER_NUM = #{nmemberNum}
+		</if>
+		ORDER BY C.ADD_DATE
+	</select>
+	
+	<!-- 장바구니 냉장 상품 조회 -->
+	<select id="getCartList1" parameterType="cart" resultType="cart">
+		SELECT C.PRODUCT_NUM PRODUCT_NUM, P.STORAGE_NUM STORAGE_NUM, CT.CATEGORY_NUM CATEGORY_NUM, P.THUM_SYS_FILENAME THUM_SYS_FILENAME, P.PRODUCT_NAME PRODUCT_NAME, 
+				C.COUNT COUNT, P.PRICE PRICE, P.SALEPRICE SALEPRICE, P.STOCK STOCK
+		FROM CART C, PRODUCT P, CATEGORY CT, DIVISION D
+		WHERE C.PRODUCT_NUM = P.PRODUCT_NUM
+		AND P.DIVISION_NUM = D.DIVISION_NUM
+		AND D.CATEGORY_NUM = CT.CATEGORY_NUM
+		AND NOT P.PRODUCT_DEL = 'Y'
+		AND NOT P.STOCK = 0
+		AND P.STORAGE_NUM = 1
+		<if test="memberNum != 0">
+		AND C.MEMBER_NUM = #{memberNum}
+		</if>
+		<if test="nmemberNum != null">
+		AND C.NMEMBER_NUM = #{nmemberNum}
+		</if>
+		ORDER BY C.ADD_DATE
+	</select>
+	
+	<!-- 장바구니 냉동 상품 조회 -->
+	<select id="getCartList2" parameterType="cart" resultType="cart">
+		SELECT C.PRODUCT_NUM PRODUCT_NUM, P.STORAGE_NUM STORAGE_NUM, CT.CATEGORY_NUM CATEGORY_NUM, P.THUM_SYS_FILENAME THUM_SYS_FILENAME, P.PRODUCT_NAME PRODUCT_NAME, 
+				C.COUNT COUNT, P.PRICE PRICE, P.SALEPRICE SALEPRICE, P.STOCK STOCK
+		FROM CART C, PRODUCT P, CATEGORY CT, DIVISION D
+		WHERE C.PRODUCT_NUM = P.PRODUCT_NUM
+		AND P.DIVISION_NUM = D.DIVISION_NUM
+		AND D.CATEGORY_NUM = CT.CATEGORY_NUM
+		AND NOT P.PRODUCT_DEL = 'Y'
+		AND NOT P.STOCK = 0
+		AND P.STORAGE_NUM = 2
+		<if test="memberNum != 0">
+		AND C.MEMBER_NUM = #{memberNum}
+		</if>
+		<if test="nmemberNum != null">
+		AND C.NMEMBER_NUM = #{nmemberNum}
+		</if>
+		ORDER BY C.ADD_DATE
+	</select>	
+	
+	<!-- 장바구니 상온 상품 조회 -->
+	<select id="getCartList3" parameterType="cart" resultType="cart">
+		SELECT C.PRODUCT_NUM PRODUCT_NUM, P.STORAGE_NUM STORAGE_NUM, CT.CATEGORY_NUM CATEGORY_NUM, P.THUM_SYS_FILENAME THUM_SYS_FILENAME, P.PRODUCT_NAME PRODUCT_NAME, 
+				C.COUNT COUNT, P.PRICE PRICE, P.SALEPRICE SALEPRICE, P.STOCK STOCK
+		FROM CART C, PRODUCT P, CATEGORY CT, DIVISION D
+		WHERE C.PRODUCT_NUM = P.PRODUCT_NUM
+		AND P.DIVISION_NUM = D.DIVISION_NUM
+		AND D.CATEGORY_NUM = CT.CATEGORY_NUM
+		AND NOT P.PRODUCT_DEL = 'Y'
+		AND NOT P.STOCK = 0
+		AND P.STORAGE_NUM = 3
+		<if test="memberNum != 0">
+		AND C.MEMBER_NUM = #{memberNum}
+		</if>
+		<if test="nmemberNum != null">
+		AND C.NMEMBER_NUM = #{nmemberNum}
+		</if>
+		ORDER BY C.ADD_DATE
+	</select>
+	
+	<!-- 장바구니 구매 불가 상품 조회 -->	
+	<select id="getCartList4" parameterType="cart" resultType="cart">
+		SELECT C.PRODUCT_NUM PRODUCT_NUM, P.STORAGE_NUM STORAGE_NUM, CT.CATEGORY_NUM CATEGORY_NUM, P.THUM_SYS_FILENAME THUM_SYS_FILENAME, P.PRODUCT_NAME PRODUCT_NAME, 
+				C.COUNT COUNT, P.PRICE PRICE, P.SALEPRICE SALEPRICE, P.STOCK STOCK
+		FROM CART C, PRODUCT P, CATEGORY CT, DIVISION D
+		WHERE C.PRODUCT_NUM = P.PRODUCT_NUM
+		AND P.DIVISION_NUM = D.DIVISION_NUM
+		AND D.CATEGORY_NUM = CT.CATEGORY_NUM
+		AND (P.PRODUCT_DEL = 'Y' OR P.STOCK = 0)
+		<if test="memberNum != 0">
+		AND C.MEMBER_NUM = #{memberNum}
+		</if>
+		<if test="nmemberNum != null">
+		AND C.NMEMBER_NUM = #{nmemberNum}
+		</if>
+		ORDER BY C.ADD_DATE
+	</select>
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+

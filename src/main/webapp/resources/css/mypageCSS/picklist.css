@@ -1,0 +1,19 @@
+   /* 찜목록 1열 정렬*/
+
+    /* 삭제. 담기버튼 */
+    .btn-outline-del {
+      width: 104px;
+      height: 35px;
+      border: 1px solid darkgrey;
+      font-size: small;
+      font-weight: bold;
+      color: darkgray;
+    }
+    .btn-outline-add {
+      width: 104px;
+      height: 35px;
+      border: 1px solid #B03FE3;
+      font-size: small;
+      font-weight: bold; 
+      color: #B03FE3;
+    }

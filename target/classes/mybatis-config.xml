@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+
+	<typeAliases>
+		<typeAlias alias="cart" type="com.spring.collabee.biz.cart.CartVO"/>
+		<typeAlias alias="order" type="com.spring.collabee.biz.order.OrderVO"/>
+		<typeAlias alias="orderCoupon" type="com.spring.collabee.biz.order.OrderCouponVO"/>
+		
+		<typeAlias alias="goods" type="com.spring.collabee.biz.goods.GoodsVO"/>
+	    <typeAlias alias="categories" type="com.spring.collabee.biz.collections.CategoriesVO"/>
+	    <typeAlias alias="coupons" type="com.spring.collabee.biz.coupons.CouponsVO"/>    	
+	    <typeAlias alias="division" type="com.spring.collabee.biz.collections.DivisionVO"/>
+		<typeAlias alias="faq" type="com.spring.collabee.biz.faq.FaqVO"/>
+		<typeAlias alias="inquiry" type="com.spring.collabee.biz.inquiry.InquiryVO"/>
+	    <typeAlias alias="board" type="com.spring.collabee.biz.board.BoardVO"/>
+	    <typeAlias alias="goodsReview" type="com.spring.collabee.biz.goods.GoodsReviewVO"/>
+   		<typeAlias alias="goodsQnA" type="com.spring.collabee.biz.goods.GoodsQnAVO"/>
+   		<typeAlias alias="specialCat" type="com.spring.collabee.biz.collections.SpecialCatVO"/>
+   		<typeAlias alias="paging" type="com.spring.collabee.biz.admingoods.adminPaginationVO"/>
+		
+   		<typeAlias alias="memberVO" type="com.spring.collabee.biz.member.MemberVO"/>
+   		<typeAlias alias="couponBoxVO" type="com.spring.collabee.biz.mycouponbox.MyCouponBoxVO"/>
+   		<typeAlias alias="emoneyUsageVO" type="com.spring.collabee.biz.emoneyusage.EmoneyUsageVO"/>
+		<typeAlias alias="pickListVO" type="com.spring.collabee.biz.mypicklist.MyPickListVO"/>
+		<typeAlias alias="orderListVO" type="com.spring.collabee.biz.myorderlist.MyOrderListVO"/>
+		<typeAlias alias="myReviewWrtVO"	type="com.spring.collabee.biz.myreview.MyReviewWrtVO"/>
+		<typeAlias alias="proReviewVO"	type="com.spring.collabee.biz.myreview.ProReviewVO"/>
+		<typeAlias alias="myproQnaVO"	type="com.spring.collabee.biz.proqna.MyProQnaVO"/>
+  </typeAliases>
+  
+
+  
+  
+</configuration>

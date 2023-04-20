@@ -1,0 +1,136 @@
+   .menuInfo {
+      list-style: none;
+      font-size: small;
+      color: #666666;
+      margin-bottom: 3px;
+    }
+    .menuInfoList {
+      padding: 0px;
+    }
+    .menuInfo span {
+      font-size: small;
+      color: #666666;
+      text-decoration: underline;
+    }
+
+
+    
+   /* 상품문의목록  */
+
+   .inquiryPro-col {
+      text-align: center; 
+      padding: 20px 0px; 
+      border-top: 2px solid black;
+      border-bottom: 1px solid black;
+    }
+    .inquiryPro-row {
+      text-align: center; 
+      padding: 20px 0px; 
+      border-bottom: 1px solid lightgray;
+      font-size: small;
+    }
+    .inquiryPro-Area {
+      padding: 20px 26px 0px 100px;
+    }
+    
+    .inquiryPro-col> div {
+      font-weight: bold;
+      font-size: small;
+      letter-spacing: -1px;
+    }
+    .answerPro {
+      list-style-type: none;
+    }
+    .answerPro-row {
+      padding: 20px 0px;
+    }
+    .answerPro-Area {  
+      padding: 20px 26px 30px 100px;
+    }
+
+    /* 상품문의 썸네일 */
+    .Q_proImg {
+      width: 60px;
+      height: 60px;
+      margin-left: 20px;
+    }
+    
+    /* 문의글 메뉴(제목) */
+    .Q_titleWrap { 
+      width: 620px; 
+      text-align: center;
+    }
+    
+    /* 문의글 제목 */
+    .Q_titleWrapCon {
+      width: 510px; 
+      text-align: left; 
+      margin-left: 30px;
+    }
+    
+    .pro_name {
+      margin-top: 10px;
+    }
+    /* 작성일 */
+    .Q_date {
+      width: 100px;
+    }
+    /* 답변상태 */
+    .Q_state {
+      width: 100px;
+    }
+
+    .category > span {
+      font-size: small;
+      color: #666666;
+    }
+
+    .category {
+      margin-bottom: 20px;
+    }
+    
+    .inquiryPro-Area {
+      margin-bottom: 40px;
+    }
+    .answerPro-Area {
+      margin-bottom: 40px;
+      background-color: #FEF7FF;
+    }
+    .iconArea {
+      width: 24px;
+      height: 24px;
+    }
+    .content {
+      margin-left: 10px;
+      font-size: small;
+      font-weight: lighter;
+    }
+    
+    /* 포인트 금액별 색상 */
+    .plusPoint {
+      color: #692498;
+    }
+    .minusPoint {
+      color:  #666666;
+    }
+
+    /* 페이징 영역 */
+    .pagination {
+      text-align: center;    
+      margin-top: 60px;
+    }
+
+    .paginationBtn {
+      background-color: white;
+      border: 1px solid lightgray;
+      width: 33px !important;
+      height: 32px ;
+    }
+    .paginationBtn > i {
+      font-size: small;
+      font-weight: bold;
+      color: gray;
+    }
+    .paginationBtn:hover {
+      background-color: #FEF7FF;
+    }

@@ -1,0 +1,137 @@
+
+ .col-8{
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
+    #text-right{
+        text-align: right;
+        width: 100%;     
+    }
+    
+    .form-inline{
+        padding: 10px 20px;
+    }
+    .form-control{
+        height: 46px;
+        width: 100%;
+        padding: 0px 11px 1px 15px;
+    }
+    .form1 {
+        width: 139px;
+        text-align: left;
+    }
+    .form2 {
+        height: 46px;
+        width: 333px;
+    }
+    .form3 {
+        width: 120px;
+    }
+
+    .input-area {
+        margin-bottom: 5px;
+        /* 유효성검사 알림 */
+    }
+    .hide {
+        display: none;
+    }
+
+    .red-message {
+        font-size: small;
+        font-weight: bold;
+        color: red;
+    }
+    
+    .purple-message {
+    	font-size: small;
+        font-weight: bold;
+        color: purple;
+    }
+    /* 중복확인 버튼 */
+    .chk-button{
+        width: 120px;
+        height: 44px;
+        background-color: white;
+        color:#692498 ;
+        border: 0.1px solid #692498;
+        border-radius: 5px;
+        padding: 0px 10px;
+        margin: 0px 0px 0px 8px;
+    }
+    .genchk{
+        width: 65px;
+        margin: 12px;
+    }
+    .form-check-label{
+        font-size: small;
+        font-weight: 200;
+        letter-spacing: -1px;
+    }
+    
+    /* 체크박스 모양변경 */
+    .circle{
+        display: inline-block; /* 영역적용가능해짐 */
+        width: 20px; height: 20px;
+        /* border: 2px solid #692498; */
+        box-sizing: border-box;
+        border-radius: 0px; /* 모서리둥글게 처리 */
+        position: relative; top: 4px;
+        cursor: pointer; /*마우스 올렸을때 손모양 처리 */
+
+       /*  background-image: url(../imgs/member/check-circle.svg); */
+        /* background-size: 100% */
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .chk:checked + .circle{
+        background-image: url(../resources/imgs/member/check-circle-fill.svg); 
+    }
+    .allchk:checked + .circle{
+       background-image: url(${pageContext.request.contextPath }/resources/imgs/member/check-circle-fill.svg); 
+    }
+
+    /* 체크박스는 display:none;을 주면 데이터 처리가 안됨 */
+    .chk, .allchk{ position: absolute; left: -1em }
+
+    /* 동의항목관련 */
+    .agreetext {
+        font-weight: 100; font-size: 0.9em;
+        color: #692498;
+    }
+    .agreeleft{
+        width: 481px;
+        text-align: left; 
+    }
+    
+    a {
+        text-decoration: none;
+    }
+    
+    /* 동의항목 모달창 */    
+    .modal-header{
+        padding: 20px;
+        border: none;
+    }
+    .modal-body {
+        padding: 20px;
+        border: none;
+    }
+    .modal-footer {
+        padding-top: 10px;
+        border: none;
+    }
+    
+    /* 생년월일  */
+    .input-area {
+        margin-bottom: 5px;
+    }
+	
+    .birthFrmGroup {
+      width: 96px;
+      height: 40px;
+      text-decoration: none;
+      border: none;
+      text-align: center;
+    }

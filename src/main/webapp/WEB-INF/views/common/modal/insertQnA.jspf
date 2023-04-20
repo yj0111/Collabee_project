@@ -1,0 +1,79 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<style>
+	label.form-check-label1:before {
+        content: "\f058";
+        font: var(--fa-font-solid);
+        color: lightgray;
+    }
+
+    input#flexCheckDefault1:checked + label.form-check-label1:before {
+        content:"\f058";
+        color: purple;
+    }
+    
+    #flexCheckDefault1 {
+        display: none;
+    }
+</style>
+
+
+<!-- The Modal -->
+<div class="modal" id="myModal2">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h1 class="modal-title">상품문의하기</h1>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      
+      <div style="padding: 16px 0px; border-bottom: 1px solid lightgray;">
+          <div style="display: flex; margin-left: 20px; float: left; margin-right: 20px;">
+          <img src="../resources/imgs/goods/${goods.thumSysFilename }" alt="상품사진" style="width: 72px; height: 72px; border-radius: 4px;">
+          </div>
+          <div style="display: flex; float: left; margin-top: 25px;">
+              <span>${goods.productName }</span>
+          </div>
+      </div>  
+
+      <!-- Modal body -->
+	      <div class="modal-body" style="margin-left: 10px;">
+      <form name="frm" id="frm" method="POST" enctype="multipart/form-data">
+	          <div style="float: left; margin-right: 20px;">
+		          <div style="float: left; margin-right: 30px;">
+		              <span>제목</span>
+		          </div>
+		          <div class="form-group" style="float: left;">
+			          <input type="text" class="form-control text" id="text-title" name="qTitle" placeholder="제목을 입력해 주세요" 
+			          data-testid="input-box" height="42" style="border-radius: 0.2em; width: 670px; height: 30px;">
+		          </div>
+	          </div>    
+	          <div style="float: left; margin-top: 10px;">
+		          <div style="float: left; margin-right: 30px;">
+		              <span>내용</span>    
+		          </div>
+		          <div style="float: left;">
+				          <textarea class="form-control" rows="5" id="comment" inputmode="text" 
+				          aria-label="textarea-message" name="qContent" class="textarea" style="border-radius: 0.2em; 
+				          width: 670px; height: 250px;" placeholder="상품문의를 작성해주세요."></textarea>
+		          </div>
+	          </div>    
+	      </div>
+	
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-danger" style="background-color: white; 
+	        border: 1px solid lightgray; color: black;" data-dismiss="modal">취소</button>
+	        <input type="button" value="등록" style="background-color: #692498; color: white; width: 60px; height: 37px; 
+	        border-radius: 0.2em; text-align: center; border: none;" onclick="insertQuestion()">
+	      </div>
+	      
+	      <input type="hidden" name="productNum" value="${goods.productNum }">
+	      <input type="hidden" name="memberNum" value="${loginMember.memberNum }">
+		</form>
+
+    </div>
+  </div>
+</div>

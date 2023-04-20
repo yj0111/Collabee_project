@@ -1,0 +1,46 @@
+.inquiry-info {
+    vertical-align: center;
+}
+.inquiry-info button{
+    width: 140px;
+    height: 40px;
+    font-size: 14px;
+    background-color: white;
+    border: 1px solid lightgray;
+    text-align: center;
+}
+.inquiry-info div {
+    font-size: 14px;
+    color: gray;
+    display: inline-block;
+    position: relative;
+    left: 10px;
+}
+
+.foot-link-list ul{
+    display: flex;
+    list-style: none;
+    padding: 0px;
+}
+
+.foot-link-list a{
+    color: black;
+    font-size: 12px;
+}
+
+.foot .detail-info{
+    margin-bottom: 30px;
+    font-size: 12px;
+    color: gray;
+}
+
+.foot .sns-icon {
+    padding: 0px;
+}
+
+.foot .sns-icon *{
+    margin: 0px 2px;
+}
+.foot .sns-icon img{
+    width: 25px;
+}

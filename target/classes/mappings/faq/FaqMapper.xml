@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="faqDAO">
+
+	 <!-- FAQ -->
+	<select id="getFaqList" parameterType="String" resultType="faq" >
+	 	SELECT *
+		  FROM (SELECT ROWNUM R_NUM, B.*
+		          FROM (SELECT *
+		                FROM FAQ 
+		<choose>
+			<when test="_parameter == null or _parameter.equals('전체')">
+				WHERE 1=1
+			    OR FAQ_TYPE = #{faqType}	
+			</when>
+			<when test="!_parameter.equals('전체')">
+		   		WHERE FAQ_TYPE = #{faqType}	
+			</when>
+		</choose>
+		 ORDER BY FAQ.FAQ_NUM 
+		                ) B  
+		       ) 
+		WHERE R_NUM BETWEEN 1 AND 10
+		ORDER BY R_NUM DESC
+	</select>
+	
+	
+	 
+	<select id="getFaq" parameterType="faq" resultType="faq">
+		SELECT *
+		FROM FAQ WHERE FAQ_NUM = #{faqNum} 
+	</select> 
+	 
+	<insert id="insertFaq" parameterType="faq">
+		INSERT INTO FAQ (FAQ_NUM,FAQ_TYPE,FAQ_TITLE,FAQ_CONTENT)
+	 	VALUES ((SELECT NVL(MAX(FAQ_NUM),0) + 1 FROM FAQ),#{faqType}, #{faqTitle},#{faqContent})
+	</insert>
+	
+	<update id="updateFaq" parameterType="faq">
+		UPDATE FAQ 
+		SET FAQ_TITLE = #{faqTitle}, 
+			FAQ_TYPE = #{faqType},
+		    FAQ_CONTENT = #{faqContent} 
+		WHERE FAQ_NUM = #{faqNum} 
+	</update>
+	
+	<delete id="deleteFaq" parameterType="faq">
+		DELETE FROM FAQ WHERE FAQ_NUM = #{faqNum}
+	</delete>
+
+</mapper>
+
+
+
+
+
+

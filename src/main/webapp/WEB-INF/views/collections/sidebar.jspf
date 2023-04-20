@@ -1,0 +1,311 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%@ taglib  prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="URL" value="${pageContext.request.requestURL}" />
+
+<style>
+	.side-bar-box li {
+        padding: 0px;
+    }
+    .side-bar-box {
+        border: white solid 1px;
+        padding-right: 20px;
+    }
+
+    .side-bar-box li .form-check{
+        padding: 0px 0px 10px 0px;
+    }
+
+    
+    label.form-check-label2:before {
+        content:"\f106";
+        font: var(--fa-font-solid);
+        color: lightgray;
+    }
+    
+    input#flexCheckDefault2:checked + label.form-check-label2:before {
+        content: "\f107";
+    }
+
+    label.form-check-label3:before {
+        content:"\f106";
+        font: var(--fa-font-solid);
+        color: lightgray;
+    }
+    
+    input#flexCheckDefault3:checked + label.form-check-label3:before {
+        content: "\f107";
+    }
+
+    label.form-check-label4:before {
+        content:"\f106";
+        font: var(--fa-font-solid);
+        color: lightgray;
+    }
+    
+    input#flexCheckDefault4:checked + label.form-check-label4:before {
+        content: "\f107";
+    } 
+
+    .side-bar-box input[type=checkbox] {
+        display: none;
+    }
+    
+    .side-bar-box input[type=radio] {
+    	font-size: 30px;
+    	backgound-color: #9A30AE;
+    	left-margin: 100px;
+    }
+
+    .side-bar-box .form-check i {
+        color: lightgray;
+        margin-right: 5px;
+    }
+
+    .search-filter-top ul{
+        list-style: none;
+        display: flex;
+    }
+
+    .search-filter-top li:not(:first-child) {
+        border-left: solid 1px lightgray;
+    }
+    
+    .search-filter-top li {
+        margin-left: 10px;
+        padding-left: 10px;
+    }
+
+    .search-filter-top a {
+        color: gray
+    }
+    
+    #new-item-box {
+    	display: flex;
+    	flex-wrap: wrap;
+    }
+    #new-item-box div.item-box {
+    	width: 280px;
+    	height: 600px;
+    	margin-left: 22px;
+    }
+
+    .item-container img {
+    	width: 280px;
+        height: 380px;
+    }
+
+    .item-container a {}
+
+    .item-container .card {
+        border: none;
+    }
+
+    .item-container .card .card-body {
+        padding: 20px 0px;
+    }
+    
+    .item-container .card p {
+        margin-bottom: 10px;
+    }
+    
+    
+    #option-show-hide3 div.form-check {
+    	margin-left : 20px;
+    }
+    
+    button {
+    	background-color: transparent;
+    	border: none;
+    }
+    
+</style>
+<script>
+// 카테고리별 상품조회, 신상품, 베스트 베이지 구분을 위한 변수
+	let path;
+	let slicePath;
+	
+	$().ready(function(){
+		
+		path = window.location.pathname;
+    	slicePath = path.substr(path.lastIndexOf('/'), path.IndexOf);
+    	
+    	if (slicePath == "/market-newproduct.do" || slicePath.substr(0, 10) == "/search.do" || slicePath == "/market-best.do"){
+        	getJsonGoodsList();
+    	} else {
+    		getJsonGoodsListByCategory()
+    	}
+    });
+    
+
+// 필터 체크하면 아작스로 상품 조회 다시 불러오는 곳, 체크된 항목 아이콘 색 변경
+    $(function(){
+    	
+    	// 리셋버튼 클릭시 이벤트
+        $("#option-reset-btn").click(function(){
+            $(".opt:checked").each(function(){
+                $(this).prop("checked", false);
+	            changeOptionColor();
+	            setColorNowDivision
+            });
+        });
+    	
+    	// 검색필터 조건 선택시 이벤트
+		$(".opt").change(function(){
+			
+	        changeOptionColor();
+	        
+	        if (slicePath == "/market-newproduct.do" || slicePath.substr(0, 10) == "/search.do" || slicePath == "/market-best.do"){
+	        	getJsonGoodsList();
+	    	} else {
+	    		getJsonGoodsListByCategory()
+	    	}
+	    });
+    	
+		// 라디오 버튼 재클릭시 체크 해제되는 함수 
+		$("input[type=radio]").each(function(){
+	
+		    var chk = $(this).is(":checked");
+		    var name = $(this).attr('name');
+		    if(chk == true) $("input[name='"+name+"']").data("previous",$(this).val());
+		    
+		});
+	
+		 $("input[type=radio]").click(function(){
+		
+			var pre = $(this).data("previous");
+			var chk = $(this).is(":checked");
+			var name = $(this).attr('name');
+			
+			if(chk == true && pre == $(this).val()){
+			
+			    $(this).prop('checked',false);
+			    $("input[name='"+name+"']").data("previous",'');
+			    
+			    if (slicePath == "/market-newproduct.do" || slicePath.substr(0, 10) == "/search.do" || slicePath == "/market-best.do"){
+		        	getJsonGoodsList();
+		    	} else {
+		    		getJsonGoodsListByCategory()
+		    	}
+			    
+			    
+			}else{
+			    if(chk == true) $("input[name='"+name+"']").data("previous",$(this).val());
+			}
+		
+		});
+    });
+
+    function changeOptionColor () {
+        $(".opt:checked").each(function(){
+                $(this).next().css('color', '#9A30AE');
+        });
+
+        $(".opt:not(:checked)").each(function(){
+            $(this).next().css('color', 'lightgray');
+        });
+    }
+    
+ // 천단위 콤마 찍는 함수 
+    function priceToString(price) {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+        
+</script>
+
+    <ul class="list-group list-group-flush  side-bar-box">
+        <li class="list-group-item  d-flex justify-content-between" style="padding: 0px 0px 15px 0px;"><div>필터</div> 
+            <button id="option-reset-btn" style="border:0; background-color: white;"> 
+                <i class="fa-solid fa-arrow-rotate-right" style="margin-right:8px;"></i>초기화
+            </button>
+        </li>
+        
+        <c:if test="${not fn:contains(URL, 'categories.jsp') || sword ne null }">
+	        <div class="justify-content-between" style="margin:20px 0px; display:flex;">
+	            <div>카테고리</div>
+	            <div class="form-check">
+	                <input style="display:none;" type=checkbox class="form-check-input" data-toggle="collapse" data-target="#option-show-hide1" value="" id="flexCheckDefault2">
+	                    <label class="form-check-label2" for="flexCheckDefault2">
+	                    </label>
+	                </input>
+	                
+	            </div>
+	        </div>
+	        <li class="list-group-item">
+	            <div  id="option-show-hide1" class="collapse show">
+	            	<c:forEach var="categoryVO" items="${categories }" varStatus="status">
+		                <div class="form-check">
+		                    <label class="form-check-label" for="c-opt${status.index +1 }">
+		                        <input name="categoryType" class="form-check-input c-opt opt" type="checkbox" value="${status.index +1 }" id="c-opt${status.index +1 }">
+		                        <i class="fa-solid fa-circle-check"></i>${categoryVO.category }
+		                    </label>
+		                </div>
+                    </c:forEach>
+	            </div>
+	        </li>
+       	</c:if>
+
+        <li class="list-group-item">
+            <div class="justify-content-between" style="margin:20px 0px; display:flex; height: 32px;">
+                <div>가격</div>
+                <div class="form-check">
+                    <input style="display:none;" type=checkbox class="form-check-input" data-toggle="collapse" data-target="#option-show-hide3" value="" id="flexCheckDefault3">
+                          <label class="form-check-label3" for="flexCheckDefault3">
+                          </label>
+                      </input>
+                      
+                  </div>
+              </div>
+
+              <div id="option-show-hide3" class="collapse show">
+                  <div class="form-check">
+                   <label class="form-check-label" for="p-opt1">
+                       <input name="priceRange" class="form-check-input p-opt opt" type="radio" value="~9900" id="p-opt1">
+                       9,900원 미만
+                   </label>
+                  </div>
+                  <div class="form-check">
+                   <label class="form-check-label" for="p-opt2">
+                       <input name="priceRange" class="form-check-input p-opt opt" type="radio" value="9900~13800" id="p-opt2">
+                       9,900원 ~ 13,800원
+                   </label>
+                  </div>
+                  <div class="form-check">
+                   <label class="form-check-label" for="p-opt3">
+                       <input name="priceRange" class="form-check-input p-opt opt" type="radio" value="13800~21900" id="p-opt3">
+                       13,800원 ~ 21,900원
+                   </label>
+                  </div>
+<div class="form-check">
+	<label class="form-check-label" for="p-opt4">
+	    <input name="priceRange" class="form-check-input p-opt opt" type="radio" value="21900~" id="p-opt4">
+	    21,900원 이상
+	</label>
+              	</div>
+              </div>
+          </li>
+
+          <li class="list-group-item">
+              <div class="justify-content-between" style="margin:20px 0px; display:flex; height: 32px;">
+                <div>혜택</div>
+                <div class="form-check">
+                    <input style="display:none;" type=checkbox class="form-check-input" data-toggle="collapse" data-target="#option-show-hide4" id="flexCheckDefault4"/>
+                    <label class="form-check-label4" for="flexCheckDefault4">
+                    </label>
+                </div>
+            </div>
+        
+        <div id="option-show-hide4" class="collapse show">
+            <div class="form-check">
+                <label class="form-check-label" for="b-opt1">
+                    <input name="benefitType" class="form-check-input b-opt opt" type="checkbox" value="discount" id="b-opt1">
+                    <i class="fa-solid fa-circle-check"></i>할인상품
+                </label>
+            </div>
+        </div>
+        </li>
+        <hr>
+
+    </ul>

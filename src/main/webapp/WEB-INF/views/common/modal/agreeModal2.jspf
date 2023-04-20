@@ -1,0 +1,70 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<style>
+	.modal2, .modal2 th, .modal2 td {
+	 	border : 1px solid lightgray;
+	}
+	.modal2 { 
+		width:100%;
+		border-collapse: collapse;
+		text-align: center;
+		margin : auto;
+	}
+	.modal2 th {
+    	padding:10px;
+        font-size:0.85rem;
+        background-color: white;
+    }
+    .modal2 td {
+    	padding:10px;
+        font-size:0.8rem;
+    }
+</style>
+<div class="modal" id="agreeModal2">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+		
+			<div class="modal-header" style="border:none;">
+				<div class="modal-title font-weight-bold text-dark" style="font-size:1.2rem;">
+			  		개인정보 제3자 제공 동의 (필수)
+				</div>
+			</div>
+		
+			<div class="modal-body" style="padding:10px 20px;">
+				<table class="modal2 text-secondary">
+					<caption class="text-dark font-weight-bold" style="caption-side:top;">
+						개인정보 제3자 제공 동의
+					</caption>
+					 <tr>
+			            <th>제공 받는 자</th>
+			            <th>제공 항목</th>
+			            <th>제공 목적</th>
+			            <th>보유 및 이용 기간</th>
+					</tr>
+					<tr>
+						<td>관할 세무서</td>
+						<td>(주류 상품 구매시)<br>구매자 인적사항(성명, 주소), 주문일자, 상품명, 수량, 주문금액</td>
+						<td>국세청 고시에 따른 주류 통신판매 주문에 대한 분기별 신고</td>
+						<td rowspan="2" class="font-weight-bold" style="text-decoration: underline;">업무 목적 달성 후 파기<br>(단, 타 법령에 따라 법령에서 규정한 기간 동안 보존)</td>
+					</tr>
+					<tr>
+						<td>A/S 지원 업체</td>
+						<td>(A/S 지원 상품 구매 시)<br>주문자 정보(성명, 휴대폰 번호), 구매 상품 정보</td>		
+						<td>서비스 제공(상품 교환, 반품), 고객 상담 및 불만 처리</td>		
+					</tr>
+				</table>
+				<div class="text-secondary font-weight-bold" style="margin:20px 10px 0 10px;font-size:0.8rem;">
+					서비스 제공을 위하여 필요한 최소한의 개인정보입니다. 동의를 해주셔야 서비스를 이용하실 수 있으며, 동의하지 않으실 경우 서비스에 제한이 있을 수 있습니다.
+				</div>
+			</div>
+		
+			<div class="modal-footer justify-content-center"  style="border:none;">
+				<button type="button" class="btn font-weight-bold" data-dismiss="modal"
+				style="color:#9A30AE;font-size:0.9rem;">
+					확인
+				</button>
+			</div>
+		  
+		</div>
+	</div>
+</div>

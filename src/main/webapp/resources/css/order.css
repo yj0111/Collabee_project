@@ -1,0 +1,79 @@
+@charset "UTF-8";
+
+span {
+	display: inline-block;
+}
+.card {
+	white-space: nowrap;
+}
+.btn:active, .btn:focus {
+	text-decoration:none;
+	outline:none !important;
+	box-shadow:none !important;
+}
+/* 배송지 변경 안내 영역 */
+.info-text {
+	display: none;
+	position: absolute;
+	right:10px;
+	top:45px;
+	background-color: white;
+}
+/* 배송 시간 선택 */
+.deliveryTable { 
+	width:100%;
+       border : 1px solid #9A30AE;
+       border-collapse: collapse;
+       text-align: center;
+       margin : auto;
+   }
+   .deliveryTable th {
+   	padding:10px;
+       border : 1px solid #9A30AE;
+       font-size:0.9rem;
+       background-color: #9A30AE;
+       color:white;
+   }
+   .deliveryTable td {
+   	padding:10px;
+       border : 1px solid #9A30AE;
+       font-size:0.8rem;
+   }
+   input[type="radio"] {
+   	accent-color:#9A30AE;
+   	cursor: pointer;
+   	margin:0 5px 0 0;
+   }
+   .payPick {
+   	display: none !important;
+   }
+/* 개인정보 수집/제공 결제진행필수*/
+/* 전체 선택 */
+.circle{
+	display: inline-block;
+	width: 20px; height: 20px;
+	border: 2px solid #999;
+	box-sizing: border-box;
+	border-radius: 10px;
+	position: relative; top: 4px;
+	cursor: pointer;
+	
+	background-image: url(https://blog.kakaocdn.net/dn/XTnSL/btrhtUIVtpB/5FungHN6IXVXG8bLbhE9Dk/img.png);
+	background-size: 70%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+input[type="checkbox"]:checked + .circle{
+	background-color: #9A30AE;
+	border-color: #9A30AE;
+	background-image: url(https://blog.kakaocdn.net/dn/t7a2D/btrhtVgLYmG/dUxzAkBy9hIZ4gHmyllQrk/img.png);
+}
+input[type="checkbox"] { position: absolute; left: -999em; }
+/* 결제 박스 영역 */
+.quickPayMenu { 
+	position: absolute;
+	width: 280px;
+	height: 400px;
+	left: 30px;
+}

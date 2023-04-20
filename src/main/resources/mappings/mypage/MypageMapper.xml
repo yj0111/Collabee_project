@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mypageDAO">
+
+	
+	<select id="getCouponCnt" parameterType="memberVO" resultType="String">
+		SELECT COUNT(COUPON_NUM) 
+		FROM COUPON_BOX 
+		WHERE MEMBER_NUM = #{memberNum} AND USAGE_STATE = 'N'
+	</select>
+
+	<select id="getTotEmoney" parameterType="memberVO" resultType="Integer">
+		SELECT DISTINCT(
+       			 NVL((SELECT SUM(AMOUNT) FROM EMONEY_USAGE WHERE CATEGORY = '적립' AND MEMBER_NUM = #{memberNum}), 0)
+       			 - NVL((SELECT SUM(AMOUNT) FROM EMONEY_USAGE WHERE CATEGORY = '사용' AND MEMBER_NUM = #{memberNum}), 0)
+        )
+		FROM EMONEY_USAGE 
+		WHERE MEMBER_NUM = #{memberNum} 
+	</select>
+
+	<select id="getCouponBoxList" parameterType="memberVO" resultType="couponBoxVO">
+		SELECT * 
+		FROM VIEW_MYCOUPONBOX
+		WHERE MEMBER_NUM = #{memberNum} 
+		ORDER BY ISSUE_DATE DESC
+	</select>
+<!-- 적립금 이력 갯수 -->
+	<select id="getEmoneyUsageCnt" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+		FROM EMONEY_USAGE
+		WHERE MEMBER_NUM = #{memberNum}
+		ORDER BY SAVE_DATE DESC
+	</select>
+<!-- 적립금 전체 리스트 -->
+	<select id="getEmoneyUsageList" parameterType="memberVO" resultType="emoneyUsageVO">
+		SELECT * FROM EMONEY_USAGE
+		WHERE MEMBER_NUM = #{memberNum}
+		ORDER BY SAVE_DATE DESC
+	</select>
+	
+	<!-- 적립금 해당하는 페이지 게시글 조회 -->
+	<select id="getEmoneyUsagePage" parameterType="map" resultType="emoneyUsageVO">
+		SELECT *
+		FROM ( SELECT ROWNUM R_NUM, E. *
+		        FROM (SELECT *
+		               FROM EMONEY_USAGE
+		               WHERE MEMBER_NUM = #{memberNum} 
+		               ORDER BY SAVE_DATE DESC  -- 역순정렬한 데이터
+		               ) E
+		            )
+		WHERE R_NUM BETWEEN #{begin} AND #{end}    
+	</select>
+
+	<!-- 찜하기 찾기 -->
+	<select id="findPickItem"  parameterType="map" resultType="Integer">
+		SELECT *
+		FROM PICK
+		WHERE MEMBER_NUM = #{productNum} AND 
+				PRODUCT_NUM = #{memberNum}
+	</select>
+	<!-- 찜하기 -->
+	<insert id="addPickList"  parameterType="map">
+		INSERT INTO PICK (MEMBER_NUM, PRODUCT_NUM) 
+		VALUES (#{memberNum}, #{productNum})
+	</insert>
+	<!-- 찜한상품 전체보기 -->	
+	<select id="getPickList" parameterType="memberVO" resultType="pickListVO"> 
+		SELECT * 
+		FROM VIEW_MYPICKLIST
+		WHERE MEMBER_NUM = #{memberNum}
+	</select>	
+	
+	<!-- 찜한상품삭제-->	
+	<select id="delPickList" parameterType="Map" resultType="Integer"> 
+		DELETE FROM PICK 
+		WHERE MEMBER_NUM = #{memberNum} AND PRODUCT_NUM = #{productNum}
+	</select>
+	
+	<!-- 주문목록조회  -->
+	<select id="getOrderList" parameterType="Map" resultType="orderListVO">
+		SELECT	*
+		FROM	VIEW_MYORDERLIST
+		WHERE	MEMBER_NUM = #{memberNum} AND 
+				ORDER_DATE BETWEEN (SELECT ADD_MONTHS(SYSDATE, -#{period})FROM DUAL) AND SYSDATE
+	</select>
+	
+	<!-- 주문상세조회 -->
+	<select id="getOrderDetail" parameterType="Map" resultType="orderListVO">
+		SELECT *
+		FROM VIEW_MYORDERLIST
+		WHERE ORDER_NUM = #{orderNum} AND MEMBER_NUM = #{memberNum}
+	</select>
+	
+	<!-- 작성 가능한작성한 리뷰 리스트 조회 -->
+	<select id="getMemberReview" parameterType="Map" resultType="myReviewWrtVO">
+		SELECT *
+		FROM VIEW_MYREVIEW_WRT
+		WHERE REVIEW_STATUS = #{reviewStatus} AND MEMBER_NUM = #{memberNum}	
+	</select>
+	
+	<!-- 작성한 리뷰 조회 -->
+	<select id="seeMyReview" parameterType="Map" resultType="myReviewWrtVO">
+		SELECT * 
+		FROM 	VIEW_MYREVIEW_WRT
+		WHERE 	PRODUCT_NUM = #{productNum} AND
+				MEMBER_NUM = #{memberNum} AND
+				ORDER_NUM = #{orderNum}
+	</select>
+	
+	<!-- 리뷰작성 -->
+	<insert id="wrietReview" parameterType="proReviewVO">
+		INSERT INTO PRO_REVIEW (REVIEW_NUM, ORDER_NUM, PRODUCT_NUM, MEMBER_NUM, 
+								R_CONTENT, R_ORI_FILENAME, R_SYS_FILENAME, R_DATE, POINT)
+		VALUES (NVL((SELECT MAX(REVIEW_NUM) FROM PRO_REVIEW), 0) + 1,
+        		#{orderNum}, #{productNum}, #{memberNum}, 
+        		#{rContent}, #{rOriFilename}, #{rSysFilename}, SYSDATE, #{point})
+	</insert>
+	
+	<!-- 리뷰작성 상태 변경 -->
+	<update id="updateState" parameterType="proReviewVO">
+		UPDATE ORDER_PRODUCT
+ 		SET REVIEW_STATUS = 'Y' 
+		WHERE PRODUCT_NUM = #{productNum} AND
+        MEMBER_NUM =  #{memberNum} AND 
+        ORDER_NUM = #{orderNum}
+	</update>
+	
+	<!-- 리뷰수정 -->
+	<update id="modifyReview" parameterType="proReviewVO">
+		UPDATE PRO_REVIEW
+		SET		R_CONTENT = #{rContent}
+		WHERE 	REVIEW_NUM = #{reviewNum}
+	</update>
+	
+	
+	<!-- 상품문의 -->
+	<select id="getMyProQna" parameterType="memberVO" resultType="myproQnaVO">
+		SELECT * 
+		FROM VIEW_PROQNA
+		WHERE MEMBER_NUM = #{memberNum}
+	</select>
+
+</mapper>

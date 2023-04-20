@@ -1,0 +1,63 @@
+
+/* 	장바구니 상품 목록 영역 */
+/* 전체 선택 */
+.circle{
+	display: inline-block;
+	width: 20px; height: 20px;
+	border: 2px solid #999;
+	box-sizing: border-box;
+	border-radius: 10px;
+	position: relative; top: 4px;
+	cursor: pointer;
+	
+	background-image: url(https://blog.kakaocdn.net/dn/XTnSL/btrhtUIVtpB/5FungHN6IXVXG8bLbhE9Dk/img.png);
+	background-size: 70%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+input[type="checkbox"]:checked + .circle{
+	background-color: #9A30AE;
+	border-color: #9A30AE;
+	background-image: url(https://blog.kakaocdn.net/dn/t7a2D/btrhtVgLYmG/dUxzAkBy9hIZ4gHmyllQrk/img.png);
+}
+input[type="checkbox"] { position: absolute; left: -999em; }
+
+.bi-snow, .bi-droplet, .bi-chevron-down, .bi-x-circle, .bi-brightness-high, .bi-geo-alt {
+	margin: 0 10px;
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+.text-secondary {
+	font-size:0.8rem;
+}
+.btn:active, .btn:focus, input {
+	text-decoration:none;
+	outline:none !important;
+	box-shadow:none !important;
+}
+
+.productImgCart {
+	padding:10px;
+}
+.card-body span {
+	vertical-align: middle;
+}
+span {
+	display: inline-block;
+}
+/* 구매 불가 안내 영역 */
+.info-text {
+	display: none;
+	position: absolute;
+	right:10px;
+	top:45px;
+	background-color: white;
+}
+/* 결제 박스 영역 */
+.quickPayMenu { 
+	position: absolute;
+	width: 280px;
+	height: 400px;
+	left: 30px;
+}

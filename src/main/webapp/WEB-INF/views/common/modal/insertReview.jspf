@@ -1,0 +1,90 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>    
+<style>
+	.filebox .upload-name {
+        display: inline-block;
+        height: 40px;
+        padding: 0 10px;
+        vertical-align: middle;
+        border: 1px solid #dddddd;
+        width: 78%;
+        color: #999999;
+    }
+    .filebox label {
+        display: inline-block;
+        padding: 10px 20px;
+        color: #fff;
+        vertical-align: middle;
+        background-color: #999999;
+        cursor: pointer;
+        height: 40px;
+        margin: 10px;
+    }
+    .filebox input[type="file"] {
+        position: absolute;
+        width: 0;
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+        border: 0;
+    }
+</style>
+    
+<!-- The Modal -->
+<div class="modal" id="myModal">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h3 class="modal-title">상품 리뷰쓰기</h3>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+
+      <!-- Modal body -->
+        <div style="padding: 16px 0px; border-bottom: 1px solid lightgray;">
+              <div style="margin-left: 20px; float: left; margin-right: 20px;">
+              <img src="../resources/imgs/goods/${goods.thumSysFilename }" alt="상품사진" style="width: 72px; height: 72px; border-radius: 4px;">
+              </div>
+              <div style="float: left; margin-top: 25px;">
+                  <span>${goods.productName }</span>
+              </div>
+          </div>  
+      <form name="frm2" id="frm2" method="post" enctype="multipart/form-data">    
+      <div class="modal-body" style="margin-left: 10px;">     
+          <div style="float: left; margin-top: 10px;">
+          <div style="float: left; margin-right: 30px;">
+              <span>내용</span>   
+          </div>
+          
+          <div style="float: left; margin-bottom: 20px;">
+          <textarea class="form-control" rows="5" id="comment" inputmode="text" 
+          aria-label="textarea-message" name="rContent" class="textarea" style="border-radius: 0.2em; 
+          width: 670px; height: 250px;" placeholder="후기를 작성해주세요."></textarea>
+          </div>
+          </div>
+          <!-- 사진 첨부 -->
+          <div class="mb-3" style="width: 673px; margin-left: 61px; margin-top: 10px;">
+              <input class="form-control" name="uploadFile" type="file" id="formFileMultiple" multiple style="border: 1px solid lightgray;">
+            <label for="formFileMultiple" class="form-label" style="background-color: #692498; color: white;"></label>   
+          </div> 
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" style="background-color: white; border: 1px solid lightgray; color: black; 
+        text-align: center;" class="btn btn-danger" data-dismiss="modal">취소</button>
+        <input type="button" onclick="insertReview()" value="등록" style="background-color: #692498; color: white; width: 60px; height: 37px; 
+        border-radius: 0.2em; text-align: center; border: none;">
+      </div>
+      
+      <input type="hidden" name="grade" value="${loginMember.grade }">
+      <input type="hidden" name="productNum" value="${goods.productNum }">
+      <input type="hidden" name="memberNum" value="${loginMember.memberNum }">
+      <input type="hidden" name="orderNum" value="${orderReviewList[0].orderNum }">
+	</form>
+
+    </div>
+  </div>
+</div>
